@@ -21,10 +21,10 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({ isOpen, onClose })
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-xl w-full border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl max-w-xl w-full border border-slate-200 dark:border-slate-800 overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[90vh] my-auto">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 bg-slate-900 text-white">
+        <div className="flex items-center justify-between px-5 py-4 bg-slate-900 text-white shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-amber-500 text-slate-950">
               <Globe className="h-5 w-5" />
@@ -49,7 +49,7 @@ export const LanguageModal: React.FC<LanguageModalProps> = ({ isOpen, onClose })
         </div>
 
         {/* Content */}
-        <div className="p-5 space-y-3 max-h-[75vh] overflow-y-auto">
+        <div className="p-5 space-y-3 flex-1 overflow-y-auto">
           {availableLanguages.map(item => {
             const isSelected = language === item.code;
             return (

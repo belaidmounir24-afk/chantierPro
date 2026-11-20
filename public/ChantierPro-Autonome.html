@@ -11,6 +11,12 @@
     body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
     .font-mono-code { font-family: 'JetBrains Mono', monospace; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
+    @media print {
+      header, nav, button, label, .no-print { display: none !important; }
+      body { background: #ffffff !important; color: #0f172a !important; }
+      section { display: block !important; page-break-inside: avoid; margin-bottom: 16px; }
+      table, th, td { border: 1px solid #cbd5e1 !important; color: #0f172a !important; }
+    }
   </style>
 </head>
 <body class="min-h-full flex flex-col bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950">
@@ -47,6 +53,14 @@
           📂 Importer JSON
           <input type="file" accept=".json" onchange="importDataJSON(event)" class="hidden">
         </label>
+
+        <button onclick="window.print()" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 text-xs font-bold border border-slate-700" title="Imprimer ou enregistrer en PDF (/pdf)">
+          🖨️ PDF
+        </button>
+
+        <button onclick="openModal('modal-backup-accounts')" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700" title="Sauvegarde & Suppression des comptes">
+          ⚙️ Comptes
+        </button>
 
         <button onclick="openModal('modal-admin-generator')" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 text-xs font-bold border border-amber-500/30" title="Générateur de clés Mounir Belaid">
           🔑 Admin
@@ -85,7 +99,7 @@
         </div>
       </div>
 
-      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-x-auto shadow-xl">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
             <tr>
@@ -129,7 +143,7 @@
         </button>
       </div>
 
-      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-x-auto shadow-xl">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
             <tr>
@@ -162,7 +176,7 @@
         </div>
       </div>
 
-      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-x-auto shadow-xl">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
             <tr>
@@ -206,7 +220,7 @@
         </button>
       </div>
 
-      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-x-auto shadow-xl">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
             <tr>
@@ -225,8 +239,8 @@
   </main>
 
   <!-- MODAL: NOUVEL OUVRRIER -->
-  <div id="modal-new-worker" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
-    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+  <div id="modal-new-worker" class="fixed inset-0 z-50 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xs hidden items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-md max-h-[90vh] overflow-y-auto my-auto rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="font-black text-white">Ajouter un Ouvrier</h3>
         <button onclick="closeModal('modal-new-worker')" class="text-slate-400 hover:text-white">✕</button>
@@ -256,8 +270,8 @@
   </div>
 
   <!-- MODAL: NOUVEL ACOMPTE -->
-  <div id="modal-new-advance" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
-    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+  <div id="modal-new-advance" class="fixed inset-0 z-50 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xs hidden items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-md max-h-[90vh] overflow-y-auto my-auto rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="font-black text-white">Verser un Acompte</h3>
         <button onclick="closeModal('modal-new-advance')" class="text-slate-400 hover:text-white">✕</button>
@@ -287,8 +301,8 @@
   </div>
 
   <!-- MODAL: NOUVEAU CHANTIER -->
-  <div id="modal-new-site" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
-    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+  <div id="modal-new-site" class="fixed inset-0 z-50 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xs hidden items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-md max-h-[90vh] overflow-y-auto my-auto rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="font-black text-white">Nouveau Chantier BTP</h3>
         <button onclick="closeModal('modal-new-site')" class="text-slate-400 hover:text-white">✕</button>
@@ -314,8 +328,8 @@
   </div>
 
   <!-- MODAL: MOUVEMENT DE STOCK -->
-  <div id="modal-stock-movement" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
-    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+  <div id="modal-stock-movement" class="fixed inset-0 z-50 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xs hidden items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-md max-h-[90vh] overflow-y-auto my-auto rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
       <div class="flex items-center justify-between">
         <h3 class="font-black text-white">Mouvement de Stock Matériau</h3>
         <button onclick="closeModal('modal-stock-movement')" class="text-slate-400 hover:text-white">✕</button>
@@ -347,9 +361,50 @@
     </div>
   </div>
 
+  <!-- MODAL: SAUVEGARDE & SUPPRESSION DES COMPTES -->
+  <div id="modal-backup-accounts" class="fixed inset-0 z-50 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xs hidden items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-md max-h-[90vh] flex flex-col my-auto rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-slate-800 shrink-0">
+        <div>
+          <h3 class="font-black text-white">⚙️ Sauvegarde & Comptes</h3>
+          <p class="text-[11px] text-slate-400">Export JSON obligatoire avant toute suppression</p>
+        </div>
+        <button onclick="closeModal('modal-backup-accounts')" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+      <div class="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
+        <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2.5">
+          <div class="font-bold text-amber-300">1. Sécurité des Données (JSON & PDF)</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <button onclick="exportAllDataJSON(); markBackupDone();" class="py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">
+              💾 Exporter JSON
+            </button>
+            <button onclick="window.print()" class="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold border border-slate-700">
+              🖨️ Imprimer / PDF
+            </button>
+          </div>
+          <div id="standalone-backup-badge" class="hidden text-[11px] font-bold text-emerald-400">
+            ✓ Sauvegarde JSON téléchargée — suppression déverrouillée.
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-rose-950/40 border border-rose-700/60 space-y-2.5">
+          <div class="font-black text-rose-300 uppercase">Zone Critique — Réinitialisation</div>
+          <p class="text-[11px] text-rose-200/80">Supprime définitivement tous les chantiers, ouvriers, pointages, acomptes et dépenses.</p>
+          <label class="flex items-start gap-2 text-[11px] text-slate-300 cursor-pointer">
+            <input type="checkbox" id="chk-standalone-backup" onchange="toggleStandaloneDeleteBtn()" class="mt-0.5">
+            <span>J'ai sauvegardé mes données JSON (ou je confirme vouloir effacer).</span>
+          </label>
+          <button id="btn-clear-all-accounts" disabled onclick="clearAllAccountsStandalone()" class="w-full py-2.5 px-4 rounded-xl bg-rose-600 disabled:bg-rose-900/50 disabled:text-white/50 hover:bg-rose-500 text-white font-black shadow-md transition-colors">
+            🗑️ SUPPRIMER TOUS LES COMPTES
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: ADMIN LICENSE GENERATOR -->
-  <div id="modal-admin-generator" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
-    <div class="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+  <div id="modal-admin-generator" class="fixed inset-0 z-50 bg-slate-950/80 p-3 sm:p-4 backdrop-blur-xs hidden items-center justify-center overflow-y-auto">
+    <div class="w-full max-w-lg max-h-[90vh] overflow-y-auto my-auto rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
       <div class="flex items-center justify-between">
         <div>
           <h3 class="font-black text-amber-400 flex items-center gap-1.5">🔑 Générateur de Licences Admin</h3>
@@ -783,6 +838,45 @@
       const key = document.getElementById('adm-key-display').textContent;
       navigator.clipboard.writeText(key);
       alert('Clé copiée : ' + key);
+    }
+
+    function markBackupDone() {
+      const badge = document.getElementById('standalone-backup-badge');
+      const chk = document.getElementById('chk-standalone-backup');
+      if (badge) badge.classList.remove('hidden');
+      if (chk) chk.checked = true;
+      toggleStandaloneDeleteBtn();
+    }
+
+    function toggleStandaloneDeleteBtn() {
+      const chk = document.getElementById('chk-standalone-backup');
+      const btn = document.getElementById('btn-clear-all-accounts');
+      if (btn && chk) {
+        btn.disabled = !chk.checked;
+      }
+    }
+
+    function clearAllAccountsStandalone() {
+      if (!confirm('Confirmez-vous la suppression de TOUS les comptes et données locales ?')) return;
+      db = {
+        sites: [{ id: 'site_1', name: 'Nouveau Chantier', client: '', address: '' }],
+        activeSite: 'site_1',
+        workers: [],
+        attendance: {},
+        advances: [],
+        materials: [],
+        expenses: [],
+        logs: []
+      };
+      saveDatabase();
+      renderSites();
+      renderPointage();
+      renderWorkers();
+      renderAdvances();
+      renderMaterials();
+      renderExpenses();
+      closeModal('modal-backup-accounts');
+      alert('Tous les comptes et données ont été supprimés.');
     }
 
     // INIT

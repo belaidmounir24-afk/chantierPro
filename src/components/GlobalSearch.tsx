@@ -21,7 +21,10 @@ import {
   Clock,
   Gauge,
   CornerDownLeft,
-  Sparkles
+  Sparkles,
+  Download,
+  FileText,
+  Trash2
 } from 'lucide-react';
 import { formatCurrency } from '../utils/calculations';
 import { calculateMaintenanceStatus } from '../utils/maintenanceNotifications';
@@ -32,7 +35,7 @@ export type SearchCategory = 'all' | 'ai' | 'workers' | 'materials' | 'equipment
 
 export interface SearchResultItem {
   id: string;
-  type: 'worker' | 'material' | 'equipment' | 'expense' | 'site' | 'ai';
+  type: 'worker' | 'material' | 'equipment' | 'expense' | 'site' | 'ai' | 'command';
   title: string;
   subtitle: string;
   badgeText: string;
@@ -58,6 +61,9 @@ interface GlobalSearchProps {
   onOpenEquipmentModal?: (equipment?: Equipment) => void;
   onOpenMaintenanceModal?: (equipment: Equipment) => void;
   onOpenExpenseModal?: (expense?: DailyExpense) => void;
+  onQuickExport?: () => void;
+  onQuickPdf?: () => void;
+  onOpenBackupModal?: () => void;
   currency?: string;
 }
 
@@ -75,6 +81,9 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
   onOpenEquipmentModal,
   onOpenMaintenanceModal,
   onOpenExpenseModal,
+  onQuickExport,
+  onQuickPdf,
+  onOpenBackupModal,
   currency = 'DZD'
 }) => {
   const { t } = useLanguage();
@@ -153,6 +162,56 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
   const results = useMemo<SearchResultItem[]>(() => {
     const q = query.trim().toLowerCase();
     const items: SearchResultItem[] = [];
+
+    // 0. Quick Slash Commands (/exporter, /pdf, /supprimer)
+    if (category === 'all') {
+      const commands = [
+        {
+          id: 'cmd_exporter',
+          title: '/exporter — Sauvegarde Intégrale JSON',
+          subtitle: 'Télécharge immédiatement la sauvegarde JSON de tous vos chantiers et comptes',
+          badgeText: 'Commande /exporter',
+          badgeColor: 'emerald' as const,
+          keywords: '/exporter exporter sauvegarde json backup donnees',
+          meta: 'Sécurité des données'
+        },
+        {
+          id: 'cmd_pdf',
+          title: '/pdf — Générer & Imprimer le Rapport PDF',
+          subtitle: 'Ouvre le rapport officiel prêt à imprimer ou enregistrer en PDF (rafraîchit le rendu)',
+          badgeText: 'Commande /pdf',
+          badgeColor: 'rose' as const,
+          keywords: '/pdf pdf rapport imprimer export',
+          meta: 'Rapport & Impression'
+        },
+        {
+          id: 'cmd_backup_modal',
+          title: 'Sauvegarde & Supprimer tous les comptes',
+          subtitle: 'Ouvre la fenêtre Sauvegarde JSON, HTML Autonome et Réinitialisation des comptes',
+          badgeText: 'Gestion Comptes',
+          badgeColor: 'amber' as const,
+          keywords: '/supprimer supprimer comptes reset reinitialiser vierge backup autonome',
+          meta: 'Paramètres & Comptes'
+        }
+      ];
+
+      commands.forEach(cmd => {
+        if (q && (cmd.keywords.includes(q) || cmd.title.toLowerCase().includes(q) || q.startsWith('/'))) {
+          items.push({
+            id: cmd.id,
+            type: 'command',
+            title: cmd.title,
+            subtitle: cmd.subtitle,
+            badgeText: cmd.badgeText,
+            badgeColor: cmd.badgeColor,
+            siteName: siteMap[activeSiteId] || 'Chantier Actif',
+            siteId: activeSiteId,
+            meta: cmd.meta,
+            raw: { commandId: cmd.id }
+          });
+        }
+      });
+    }
 
     // 1. Workers
     if (category === 'all' || category === 'workers') {
@@ -385,6 +444,15 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
     }
 
     switch (item.type) {
+      case 'command':
+        if (item.id === 'cmd_exporter' && onQuickExport) {
+          onQuickExport();
+        } else if (item.id === 'cmd_pdf' && onQuickPdf) {
+          onQuickPdf();
+        } else if (item.id === 'cmd_backup_modal' && onOpenBackupModal) {
+          onOpenBackupModal();
+        }
+        break;
       case 'worker':
         onSelectTab('team');
         break;
@@ -616,6 +684,8 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
                           ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400'
                           : item.type === 'ai'
                           ? 'bg-amber-500/20 text-amber-600 dark:text-amber-300'
+                          : item.type === 'command'
+                          ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-300'
                           : 'bg-slate-500/15 text-slate-600 dark:text-slate-400'
                       }`}
                     >
@@ -625,6 +695,11 @@ export const GlobalSearch: React.FC<GlobalSearchProps> = ({
                       {item.type === 'expense' && <HandCoins className="w-5 h-5" />}
                       {item.type === 'site' && <Building2 className="w-5 h-5" />}
                       {item.type === 'ai' && <Sparkles className="w-5 h-5" />}
+                      {item.type === 'command' && (
+                        item.id === 'cmd_exporter' ? <Download className="w-5 h-5" /> :
+                        item.id === 'cmd_pdf' ? <FileText className="w-5 h-5" /> :
+                        <Trash2 className="w-5 h-5" />
+                      )}
                     </div>
 
                     {/* Titles */}

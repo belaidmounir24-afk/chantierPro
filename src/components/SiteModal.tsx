@@ -74,13 +74,13 @@ export const SiteModal: React.FC<SiteModalProps> = ({
   return (
     <div
       id="site-modal-overlay"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-xs"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto"
       onClick={e => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
-        <div className="flex items-center justify-between bg-slate-900 px-6 py-4 text-white">
+      <div className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-150 flex flex-col max-h-[92vh] my-auto">
+        <div className="flex items-center justify-between bg-slate-900 px-6 py-4 text-white shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500 text-slate-900 font-bold">
               <Building2 className="h-5 w-5" />
@@ -104,7 +104,7 @@ export const SiteModal: React.FC<SiteModalProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 flex-1 overflow-y-auto">
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">
               Nom du Chantier *

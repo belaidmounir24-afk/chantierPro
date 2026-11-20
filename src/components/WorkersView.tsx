@@ -635,11 +635,11 @@ export const WorkersView: React.FC<WorkersViewProps> = ({
       {/* Individual Worker Profile Details Modal */}
       {selectedWorkerDetail && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-3 sm:p-4 backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto"
           onClick={() => setSelectedWorkerDetail(null)}
         >
           <div
-            className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden border border-slate-100 animate-in fade-in zoom-in-95 duration-150 p-6 space-y-4"
+            className="w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 shadow-2xl overflow-y-auto max-h-[92vh] my-auto border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in-95 duration-150 p-6 space-y-4"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-start justify-between">

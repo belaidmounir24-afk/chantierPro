@@ -63,6 +63,7 @@ import { AiSmartCaptureModal } from './components/AiSmartCaptureModal';
 import { LoginScreen } from './components/LoginScreen';
 import { ClientDashboardView } from './components/ClientDashboardView';
 import { triggerHaptic } from './utils/android';
+import { downloadFile } from './utils/calculations';
 import { safeFetch } from './utils/network';
 import { getEquipmentMaintenanceAlerts, playMaintenanceChime } from './utils/maintenanceNotifications';
 import { useLanguage } from './i18n/LanguageContext';
@@ -217,6 +218,40 @@ export default function App() {
     setPeriodReportDates({ start, end });
     setPeriodReportModalOpen(true);
   };
+
+  const handleQuickExport = () => {
+    triggerHaptic('light');
+    const json = StorageService.exportJSON(db);
+    const date = new Date().toISOString().slice(0, 10);
+    downloadFile(`ChantierPro_Sauvegarde_${date}.json`, json, 'application/json');
+    setBackupModalOpen(true);
+  };
+
+  const handleQuickPdf = () => {
+    triggerHaptic('light');
+    setCurrentTab('rep');
+    handleOpenPeriodReport();
+  };
+
+  // Support direct /exporter and /pdf URL commands
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const path = window.location.pathname.toLowerCase();
+    const params = new URLSearchParams(window.location.search);
+    const cmd = params.get('cmd')?.toLowerCase() || params.get('action')?.toLowerCase();
+
+    if (path === '/exporter' || path === '/export' || cmd === 'exporter') {
+      const json = StorageService.exportJSON(db);
+      const date = new Date().toISOString().slice(0, 10);
+      downloadFile(`ChantierPro_Sauvegarde_${date}.json`, json, 'application/json');
+      setBackupModalOpen(true);
+      window.history.replaceState({}, '', '/');
+    } else if (path === '/pdf' || cmd === 'pdf') {
+      setCurrentTab('rep');
+      setPeriodReportModalOpen(true);
+      window.history.replaceState({}, '', '/');
+    }
+  }, []);
 
   // Check Auth Config de façon asynchrone non-bloquante avec timeout strict
   useEffect(() => {
@@ -1405,6 +1440,7 @@ export default function App() {
         db={db}
         onUpdateDb={updateDb}
         onOpenCloudModal={() => setCloudSyncModalOpen(true)}
+        onOpenPeriodReport={() => handleOpenPeriodReport()}
       />
 
       <CloudSyncModal
@@ -1451,6 +1487,9 @@ export default function App() {
         onOpenEquipmentModal={handleOpenEquipmentModal}
         onOpenMaintenanceModal={handleOpenMaintenanceModal}
         onOpenExpenseModal={handleOpenExpenseModal}
+        onQuickExport={handleQuickExport}
+        onQuickPdf={handleQuickPdf}
+        onOpenBackupModal={() => setBackupModalOpen(true)}
         currency={db.currency || 'DZD'}
       />
 
