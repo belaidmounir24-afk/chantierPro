@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Rounded App Background for Android Icon -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)" />
+  <rect x="16" y="16" width="480" height="480" rx="96" fill="none" stroke="#334155" stroke-width="6" opacity="0.6" />
+  
+  <!-- Crane / Construction Tower Icon -->
+  <g transform="translate(64, 56) scale(0.75)">
+    <!-- Base -->
+    <rect x="210" y="440" width="100" height="24" rx="6" fill="#64748b" />
+    <rect x="180" y="460" width="160" height="20" rx="6" fill="#475569" />
+    
+    <!-- Mast (Tower) -->
+    <rect x="240" y="140" width="40" height="300" fill="url(#amberGrad)" rx="4" />
+    <!-- Mast Cross Bracing -->
+    <path d="M240 160 L280 200 M280 160 L240 200 M240 220 L280 260 M280 220 L240 260 M240 280 L280 320 M280 280 L240 320 M240 340 L280 380 M280 340 L240 380 M240 400 L280 440 M280 400 L240 440" stroke="#b45309" stroke-width="4" />
+    
+    <!-- Cab -->
+    <rect x="220" y="130" width="80" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="4" />
+    <rect x="260" y="140" width="30" height="25" rx="4" fill="#38bdf8" />
+    
+    <!-- Jib (Horizontal Arm) -->
+    <rect x="60" y="110" width="400" height="24" rx="4" fill="url(#amberGrad)" />
+    <!-- Counterweight -->
+    <rect x="60" y="100" width="60" height="45" rx="6" fill="#64748b" stroke="#334155" stroke-width="3" />
+    <rect x="80" y="112" width="20" height="20" rx="3" fill="#94a3b8" />
+    
+    <!-- Apex Tower -->
+    <polygon points="260,30 230,110 290,110" fill="url(#amberGrad)" />
+    <!-- Tie Ropes -->
+    <line x1="260" y1="30" x2="80" y2="110" stroke="#f8fafc" stroke-width="4" stroke-dasharray="6,4" />
+    <line x1="260" y1="30" x2="420" y2="110" stroke="#f8fafc" stroke-width="4" stroke-dasharray="6,4" />
+    
+    <!-- Hook Cable & Trolley -->
+    <rect x="360" y="125" width="24" height="12" rx="2" fill="#334155" />
+    <line x1="372" y1="137" x2="372" y2="280" stroke="#f8fafc" stroke-width="4" />
+    
+    <!-- Hook Block -->
+    <circle cx="372" cy="285" r="14" fill="#f59e0b" />
+    <path d="M372 295 C372 315 352 315 352 300" fill="none" stroke="#f8fafc" stroke-width="6" stroke-linecap="round" />
+    
+    <!-- Hard Hat Emblem Overlay -->
+    <g transform="translate(180, 240) scale(1.4)">
+      <ellipse cx="60" cy="70" rx="42" ry="14" fill="#0f172a" opacity="0.5" />
+      <path d="M24 64 C24 38 40 24 60 24 C80 24 96 38 96 64 Z" fill="url(#amberGrad)" />
+      <path d="M16 64 Q60 58 104 64 C108 66 106 70 100 70 L20 70 C14 70 12 66 16 64 Z" fill="#d97706" />
+      <rect x="56" y="24" width="8" height="40" fill="#fef08a" opacity="0.6" rx="2" />
+    </g>
+  </g>
+  
+  <!-- Subtle Badge Bottom Right -->
+  <g transform="translate(340, 360)">
+    <rect width="130" height="100" rx="24" fill="#1e293b" stroke="#38bdf8" stroke-width="5" />
+    <text x="65" y="44" fill="#38bdf8" font-family="Arial, sans-serif" font-weight="900" font-size="28" text-anchor="middle">PRO</text>
+    <text x="65" y="76" fill="#f8fafc" font-family="Arial, sans-serif" font-weight="700" font-size="18" text-anchor="middle">BTP</text>
+  </g>
+</svg>

@@ -1,0 +1,94 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Information du compte de l'entrepreneur ou chef de chantier",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string" },
+        "name": { "type": "string" },
+        "companyName": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string" },
+        "licenseStatus": { "type": "string" },
+        "lastSyncedAt": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "deviceInfo": { "type": "string" }
+      },
+      "required": ["id", "lastSyncedAt"]
+    },
+    "CloudProject": {
+      "title": "CloudProject",
+      "description": "Fiche de chantier synchronisée sur le cloud",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "client": { "type": "string" },
+        "address": { "type": "string" },
+        "radius": { "type": "number" },
+        "budget": { "type": "number" },
+        "status": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "isDeleted": { "type": "boolean" }
+      },
+      "required": ["id", "name", "updatedAt"]
+    },
+    "CloudInvitation": {
+      "title": "CloudInvitation",
+      "description": "Invitation client ou sous-traitant avec token sécurisé",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "siteId": { "type": "string" },
+        "siteName": { "type": "string" },
+        "recipientName": { "type": "string" },
+        "recipientPhone": { "type": "string" },
+        "recipientRole": { "type": "string" },
+        "token": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "expiresAt": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "siteId", "recipientName", "token", "status"]
+    },
+    "CloudBackup": {
+      "title": "CloudBackup",
+      "description": "Snapshot complet de sauvegarde du téléphone pour restauration instantanée en cas de casse ou changement d'appareil",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "appVersion": { "type": "string" },
+        "dataJson": { "type": "string" },
+        "sitesCount": { "type": "number" },
+        "workersCount": { "type": "number" },
+        "expensesCount": { "type": "number" },
+        "advancesCount": { "type": "number" },
+        "materialsCount": { "type": "number" },
+        "invitationsCount": { "type": "number" }
+      },
+      "required": ["userId", "timestamp", "dataJson"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Profil et métadonnées de synchronisation de l'utilisateur"
+    },
+    "/users/{userId}/cloud_backup/{backupId}": {
+      "schema": "CloudBackup",
+      "description": "Sauvegarde intégrale pour restauration après perte ou casse du téléphone"
+    },
+    "/users/{userId}/sites/{siteId}": {
+      "schema": "CloudProject",
+      "description": "Chantiers et projets individuels"
+    },
+    "/users/{userId}/invitations/{invitationId}": {
+      "schema": "CloudInvitation",
+      "description": "Invitations sécurisées pour clients et partenaires"
+    }
+  }
+}

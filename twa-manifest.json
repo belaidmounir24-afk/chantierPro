@@ -1,0 +1,56 @@
+{
+  "packageId": "com.chantierpro.btp.app",
+  "host": "ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app",
+  "name": "ChantierPro — Gestion de Chantier BTP",
+  "launcherName": "ChantierPro",
+  "themeColor": "#0F172A",
+  "themeColorDark": "#0F172A",
+  "navigationColor": "#0F172A",
+  "navigationColorDark": "#0F172A",
+  "navigationDividerColor": "#1E293B",
+  "navigationDividerColorDark": "#1E293B",
+  "backgroundColor": "#0F172A",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/pwa-512x512.png",
+  "maskableIconUrl": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/pwa-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionCode": 1,
+  "appVersionName": "1.0.0",
+  "shortcuts": [
+    {
+      "name": "Pointage Chantier",
+      "shortName": "Pointage",
+      "url": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/?tab=dash",
+      "chosenIconUrl": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/icon.svg"
+    },
+    {
+      "name": "Personnel & Paie",
+      "shortName": "Personnel",
+      "url": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/?tab=team",
+      "chosenIconUrl": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/icon.svg"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "orientation": "portrait",
+  "fullScreen": false
+}

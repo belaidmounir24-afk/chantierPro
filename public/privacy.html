@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Politique de Confidentialité — ChantierPro</title>
+  <meta name="description" content="Politique de confidentialité et protection des données de l'application mobile et web ChantierPro." />
+  <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #131d33;
+      --card-border: #202e4d;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --amber: #f59e0b;
+      --amber-dark: #b45309;
+      --emerald: #10b981;
+      --cyan: #06b6d4;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 24px 16px 60px 16px;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 32px;
+    }
+    .app-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.25);
+      border: 2px solid rgba(245, 158, 11, 0.4);
+      object-fit: cover;
+    }
+    .header-title h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .badge-status {
+      display: inline-block;
+      padding: 3px 10px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h2 span.num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 14.5px;
+      margin-bottom: 12px;
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+    ul {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 12px 0;
+    }
+    li {
+      color: var(--text-muted);
+      font-size: 14px;
+      padding-left: 24px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    li::before {
+      content: "•";
+      color: var(--amber);
+      font-weight: bold;
+      position: absolute;
+      left: 8px;
+      font-size: 18px;
+      top: -2px;
+    }
+    strong {
+      color: #ffffff;
+    }
+    .contact-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(6, 182, 212, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-top: 32px;
+    }
+    .contact-box a {
+      color: var(--amber);
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .contact-box a:hover {
+      text-decoration: underline;
+    }
+    .btn-return {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: var(--amber);
+      color: #0b1120;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .btn-return:hover {
+      background: #fbbf24;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+      color: #64748b;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <img src="/pwa-192x192.png" alt="Logo ChantierPro" class="app-icon" />
+      <div class="header-title">
+        <h1>ChantierPro — Politique de Confidentialité</h1>
+        <p>Conforme aux normes Google Play Developer Policy & RGPD</p>
+      </div>
+    </header>
+
+    <div class="badge-status">
+      ✓ Dernière mise à jour : 2 Septembre 2026 • Version 1.0 (Production)
+    </div>
+
+    <div class="card">
+      <h2><span class="num">1</span> Introduction & Objet</h2>
+      <p>
+        L'application <strong>ChantierPro</strong> est un outil professionnel d'aide à la gestion, au pointage et au suivi financier et matériel de chantiers de construction, destiné aux artisans, chefs de chantier, conducteurs de travaux et entreprises du BTP.
+      </p>
+      <p>
+        La présente Politique de Confidentialité explique de manière transparente la façon dont vos données et les données de vos chantiers sont traitées, sécurisées et conservées lorsque vous utilisez l'application mobile Android et l'application Web.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">2</span> Philosophie Locale & Souveraineté des Données</h2>
+      <p>
+        Contrairement aux plateformes publicitaires, <strong>ChantierPro adopte une architecture axée sur la confidentialité (Local-First)</strong> :
+      </p>
+      <ul>
+        <li><strong>Stockage local :</strong> Toutes les données opérationnelles (liste des chantiers, identité des ouvriers, taux horaires, pointages journaliers, acomptes, factures, dépenses et stocks) sont stockées directement dans la mémoire de votre appareil (Stockage local sécurisé du navigateur / Progressive Web App).</li>
+        <li><strong>Aucune revente de données :</strong> Vos données professionnelles et les données de vos équipes ne sont jamais vendues, louées, ni cédées à des courtiers de données ou à des tiers à des fins marketing ou publicitaires.</li>
+        <li><strong>Pleine propriété :</strong> Vous êtes l'unique propriétaire de l'ensemble de vos données de chantier.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">3</span> Types de Données Traitées</h2>
+      <p>Dans le cadre strict du fonctionnement de l'application, les informations suivantes peuvent être saisies par l'utilisateur :</p>
+      <ul>
+        <li><strong>Informations de chantier :</strong> Nom du chantier, adresse, nom du client et dates d'intervention.</li>
+        <li><strong>Informations relatives au personnel :</strong> Nom de l'ouvrier, métier/qualification, numéro de téléphone (optionnel), tarif journalier/horaire et relevé des présences.</li>
+        <li><strong>Gestion financière :</strong> Dépenses de chantier, justificatifs de caisse, acomptes sur salaire versés et approvisionnements de trésorerie.</li>
+        <li><strong>Matériaux et parc d'engins :</strong> Références de stock, bons d'entrée/sortie, relevés d'heures et journal de maintenance des équipements.</li>
+        <li><strong>Photos & Pièces jointes :</strong> Photographies de bons de livraison, factures de matériaux ou comptes-rendus de chantier ajoutées volontairement par l'utilisateur.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">4</span> Permissions Requises sur Android</h2>
+      <p>L'application mobile peut solliciter les permissions suivantes sur votre appareil, exclusivement avec votre accord explicite :</p>
+      <ul>
+        <li><strong>Appareil Photo (Caméra) :</strong> Utilisé exclusivement pour prendre en photo un ticket de caisse, un bon de livraison, scanner un reçu avec l'assistance d'analyse intelligente ou scanner un QR Code de pointage.</li>
+        <li><strong>Accès aux Fichiers / Galerie :</strong> Permet de sélectionner une photo ou un document PDF existant pour l'associer à une dépense, ou de sauvegarder/restaurer un fichier de sauvegarde (<code>.json</code>).</li>
+        <li><strong>Géolocalisation (Optionnel) :</strong> Utilisé uniquement si vous activez le badgeage GPS pour vérifier la proximité du chantier lors du pointage d'équipe. La position n'est ni enregistrée en continu, ni transmise à un serveur distant de traçage.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">5</span> Fonctionnalités d'Intelligence Artificielle</h2>
+      <p>
+        Si vous utilisez les modules d'aide IA (ex. génération de rapport journalier BTP, estimation de quantités de béton/matériaux, lecture automatique de reçu) :
+      </p>
+      <ul>
+        <li>Les données textuelles ou images transmises le sont via une connexion sécurisée et chiffrée (HTTPS / TLS).</li>
+        <li>Ces données sont traitées de manière éphémère pour générer le résultat sollicité et ne sont jamais utilisées pour entraîner des modèles publics avec vos données confidentielles.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">6</span> Contrôle, Exportation & Suppression de vos Données</h2>
+      <p>Vous disposez d'un contrôle total et permanent sur l'ensemble de vos données :</p>
+      <ul>
+        <li><strong>Exportation complète :</strong> Grâce à la fonction intégrée <em>« Sauvegarde & Restauration »</em>, vous pouvez à tout moment exporter l'intégralité de votre base de données au format ouvert standard JSON pour la conserver en lieu sûr.</li>
+        <li><strong>Suppression intégrale :</strong> Vous pouvez à tout moment réinitialiser la base de données ou supprimer l'application de votre appareil. Toutes les données locales sont alors immédiatement et définitivement effacées.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">7</span> Sécurité</h2>
+      <p>
+        Nous mettons en œuvre des mesures de sécurité techniques pour protéger vos informations contre tout accès non autorisé, y compris l'utilisation de protocoles de communication sécurisés (HTTPS avec chiffrement SSL/TLS) et la possibilité de protéger l'accès à l'application par un code secret / mot de passe.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2><span class="num">8</span> Contact du Responsable & Support</h2>
+      <p>
+        Pour toute question, demande d'information ou exercice de vos droits relatifs à la confidentialité de vos données, vous pouvez contacter le support officiel :
+      </p>
+      <p>
+        <strong>Éditeur officiel :</strong> ChantierPro BTP Solutions<br />
+        <strong>Application :</strong> ChantierPro<br />
+        <strong>Courriel d'assistance :</strong> <a href="mailto:belaidmounir24@gmail.com?subject=Contact%20depuis%20l'application&body=Bonjour,%20je%20souhaite%20vous%20contacter%20concernant%20l'application." style="color: #f59e0b; font-weight: bold;">Contacter le propriétaire (belaidmounir24@gmail.com)</a>
+      </p>
+    </div>
+
+    <div class="contact-box">
+      <h3 style="color: #ffffff; margin-bottom: 8px;">Besoin d'aide ou d'une licence professionnelle ?</h3>
+      <p style="margin-bottom: 16px;">
+        Pour obtenir une licence commerciale, un support dédié ou poser vos questions techniques : <a href="mailto:belaidmounir24@gmail.com?subject=Contact%20depuis%20l'application&body=Bonjour,%20je%20souhaite%20vous%20contacter%20concernant%20l'application.">Contacter le propriétaire</a>.
+      </p>
+      <a href="/" class="btn-return">← Retourner à l'application ChantierPro</a>
+    </div>
+
+    <footer>
+      © 2026 ChantierPro. Tous droits réservés. Développé pour les professionnels du BTP.
+    </footer>
+  </div>
+</body>
+</html>

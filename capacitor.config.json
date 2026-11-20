@@ -1,0 +1,19 @@
+{
+  "appId": "com.chantierpro.btp.app",
+  "appName": "ChantierPro",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app",
+      "*.run.app",
+      "*.googleapis.com"
+    ]
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
+}

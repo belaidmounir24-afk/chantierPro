@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookie Check OK</title>
+</head>
+<body>
+  <script>
+    try {
+      window.parent.postMessage({ type: 'cookie_check', ok: true }, '*');
+    } catch (e) {}
+  </script>
+  <p style="font-family: sans-serif; color: #10b981; font-weight: bold;">Cookie Check OK</p>
+</body>
+</html>

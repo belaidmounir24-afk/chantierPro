@@ -1,0 +1,120 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity Validators
+    function isValidUserProfile(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.lastSyncedAt is string && data.lastSyncedAt.size() <= 64 &&
+             (!('email' in data) || (data.email is string && data.email.size() <= 256)) &&
+             (!('name' in data) || (data.name is string && data.name.size() <= 128)) &&
+             (!('companyName' in data) || (data.companyName is string && data.companyName.size() <= 128)) &&
+             (!('phone' in data) || (data.phone is string && data.phone.size() <= 64)) &&
+             (!('role' in data) || (data.role is string && data.role.size() <= 64)) &&
+             (!('licenseStatus' in data) || (data.licenseStatus is string && data.licenseStatus.size() <= 64)) &&
+             (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 64)) &&
+             (!('deviceInfo' in data) || (data.deviceInfo is string && data.deviceInfo.size() <= 256));
+    }
+
+    function isValidCloudBackup(data) {
+      return data.userId is string && data.userId == request.auth.uid &&
+             data.timestamp is string && data.timestamp.size() <= 64 &&
+             data.dataJson is string && data.dataJson.size() <= 900000 &&
+             (!('appVersion' in data) || (data.appVersion is string && data.appVersion.size() <= 32)) &&
+             (!('sitesCount' in data) || data.sitesCount is number) &&
+             (!('workersCount' in data) || data.workersCount is number) &&
+             (!('expensesCount' in data) || data.expensesCount is number) &&
+             (!('advancesCount' in data) || data.advancesCount is number) &&
+             (!('materialsCount' in data) || data.materialsCount is number) &&
+             (!('invitationsCount' in data) || data.invitationsCount is number);
+    }
+
+    function isValidCloudProject(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 200 &&
+             data.updatedAt is string && data.updatedAt.size() <= 64 &&
+             (!('client' in data) || (data.client is string && data.client.size() <= 128)) &&
+             (!('address' in data) || (data.address is string && data.address.size() <= 256)) &&
+             (!('radius' in data) || data.radius is number) &&
+             (!('budget' in data) || data.budget is number) &&
+             (!('status' in data) || (data.status is string && data.status.size() <= 64)) &&
+             (!('isDeleted' in data) || data.isDeleted is bool);
+    }
+
+    function isValidCloudInvitation(data) {
+      return data.id is string && data.id.size() <= 128 &&
+             data.siteId is string && data.siteId.size() <= 128 &&
+             data.recipientName is string && data.recipientName.size() > 0 && data.recipientName.size() <= 128 &&
+             data.token is string && data.token.size() > 0 && data.token.size() <= 128 &&
+             data.status is string && data.status.size() <= 64 &&
+             (!('siteName' in data) || (data.siteName is string && data.siteName.size() <= 200)) &&
+             (!('recipientPhone' in data) || (data.recipientPhone is string && data.recipientPhone.size() <= 64)) &&
+             (!('recipientRole' in data) || (data.recipientRole is string && data.recipientRole.size() <= 64)) &&
+             (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 64)) &&
+             (!('expiresAt' in data) || (data.expiresAt is string && data.expiresAt.size() <= 64)) &&
+             (!('notes' in data) || (data.notes is string && data.notes.size() <= 1000));
+    }
+
+    // User Root Collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUserProfile(incoming());
+      allow update: if isOwner(userId) && isValidUserProfile(incoming());
+      allow delete: if isOwner(userId);
+
+      // Cloud Backup Subcollection (For full phone restore)
+      match /cloud_backup/{backupId} {
+        allow get: if isOwner(userId) && isValidId(backupId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(backupId) && isValidCloudBackup(incoming());
+        allow update: if isOwner(userId) && isValidId(backupId) && isValidCloudBackup(incoming());
+        allow delete: if isOwner(userId) && isValidId(backupId);
+      }
+
+      // Sites Subcollection
+      match /sites/{siteId} {
+        allow get: if isOwner(userId) && isValidId(siteId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(siteId) && isValidCloudProject(incoming());
+        allow update: if isOwner(userId) && isValidId(siteId) && isValidCloudProject(incoming());
+        allow delete: if isOwner(userId) && isValidId(siteId);
+      }
+
+      // Invitations Subcollection
+      match /invitations/{invitationId} {
+        allow get: if isOwner(userId) && isValidId(invitationId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(invitationId) && isValidCloudInvitation(incoming());
+        allow update: if isOwner(userId) && isValidId(invitationId) && isValidCloudInvitation(incoming());
+        allow delete: if isOwner(userId) && isValidId(invitationId);
+      }
+    }
+  }
+}

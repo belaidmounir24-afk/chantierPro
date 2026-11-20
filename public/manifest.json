@@ -1,0 +1,77 @@
+{
+  "name": "Application de gestion de chantier",
+  "short_name": "ChantierApp",
+  "description": "Application professionnelle mobile de gestion de chantier : pointage journalier, suivi du personnel, acomptes, stocks matériaux, engins et journal de bord.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "lang": "fr",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "categories": ["business", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Aperçu mobile de l'application"
+    },
+    {
+      "src": "/screenshots/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Aperçu bureau de l'application"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Pointage Chantier",
+      "short_name": "Pointage",
+      "description": "Accéder directement à la grille de pointage",
+      "url": "/?tab=dash",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Personnel & Paie",
+      "short_name": "Personnel",
+      "description": "Gérer les ouvriers et leurs acomptes",
+      "url": "/?tab=team",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Matériaux & Engins",
+      "short_name": "Matériaux",
+      "description": "Suivi des bons de livraison et parc matériel",
+      "url": "/?tab=mat",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Journal de Chantier",
+      "short_name": "Journal",
+      "description": "Rédiger le rapport quotidien du chantier",
+      "url": "/?tab=log",
+      "icons": [{ "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-900 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ChantierPro BTP — Version Autonome Hors-Ligne</title>
+  <meta name="description" content="Application autonome de gestion de chantier BTP : pointage, ouvriers, acomptes, matériaux, journal et export JSON. Fonctionne 100% hors-ligne.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+    body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+    .font-mono-code { font-family: 'JetBrains Mono', monospace; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center font-black text-amber-400 text-lg">
+          CP
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-black text-white">ChantierPro <span class="text-amber-400 text-xs sm:text-sm font-semibold">Autonome Hors-Ligne</span></h1>
+            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-full font-bold">100% Local</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Gestion terrain · Aucune connexion requise</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- Site Selector -->
+        <select id="select-active-site" class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs font-bold text-white outline-none focus:border-amber-400"></select>
+
+        <button onclick="openModal('modal-new-site')" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700">
+          + Chantier
+        </button>
+
+        <button onclick="exportAllDataJSON()" class="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-md flex items-center gap-1.5">
+          💾 Exporter JSON
+        </button>
+
+        <label class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 cursor-pointer flex items-center gap-1.5">
+          📂 Importer JSON
+          <input type="file" accept=".json" onchange="importDataJSON(event)" class="hidden">
+        </label>
+
+        <button onclick="openModal('modal-admin-generator')" class="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 text-xs font-bold border border-amber-500/30" title="Générateur de clés Mounir Belaid">
+          🔑 Admin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="bg-slate-900 border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 flex items-center gap-2 overflow-x-auto no-scrollbar py-2 text-xs font-bold">
+      <button onclick="switchTab('pointage')" id="tab-btn-pointage" class="tab-btn px-3 py-2 rounded-xl bg-amber-500 text-slate-950">📋 Pointage Journalier</button>
+      <button onclick="switchTab('workers')" id="tab-btn-workers" class="tab-btn px-3 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">👷 Ouvriers & Paie</button>
+      <button onclick="switchTab('advances')" id="tab-btn-advances" class="tab-btn px-3 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">💵 Acomptes</button>
+      <button onclick="switchTab('materials')" id="tab-btn-materials" class="tab-btn px-3 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">🧱 Matériaux & Stocks</button>
+      <button onclick="switchTab('journal')" id="tab-btn-journal" class="tab-btn px-3 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">📖 Journal de Chantier</button>
+      <button onclick="switchTab('caisse')" id="tab-btn-caisse" class="tab-btn px-3 py-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white">💰 Caisse & Dépenses</button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 flex-1 w-full space-y-6">
+
+    <!-- 1. TAB POINTAGE -->
+    <section id="tab-pointage" class="space-y-4">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 class="text-lg font-black text-white">Feuille de Pointage Quotidien</h2>
+          <p class="text-xs text-slate-400">Présences, retards et calcul automatique des journées</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="date" id="pointage-date" onchange="renderPointage()" class="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-xs text-white font-bold outline-none">
+          <button onclick="quickMarkAllPresent()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">
+            ✓ Tous Présents
+          </button>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+            <tr>
+              <th class="p-3">Ouvrier</th>
+              <th class="p-3">Métier / Équipe</th>
+              <th class="p-3">Statut Présence</th>
+              <th class="p-3">Heures Supp</th>
+              <th class="p-3">Taux Jour</th>
+              <th class="p-3 text-right">Montant Jour</th>
+            </tr>
+          </thead>
+          <tbody id="pointage-table-body" class="divide-y divide-slate-800/60"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 2. TAB WORKERS -->
+    <section id="tab-workers" class="space-y-4 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 class="text-lg font-black text-white">Répertoire du Personnel & Corps d'État</h2>
+          <p class="text-xs text-slate-400">Niveaux de qualification, tarifs journaliers et coordonnées</p>
+        </div>
+        <button onclick="openModal('modal-new-worker')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">
+          + Nouvel Ouvrier
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="workers-cards-grid"></div>
+    </section>
+
+    <!-- 3. TAB ACOMPTES -->
+    <section id="tab-advances" class="space-y-4 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 class="text-lg font-black text-white">Suivi des Acomptes & Règlements</h2>
+          <p class="text-xs text-slate-400">Avances sur salaire, reçus signés et déductions</p>
+        </div>
+        <button onclick="openModal('modal-new-advance')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">
+          + Verser un Acompte
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+            <tr>
+              <th class="p-3">Date</th>
+              <th class="p-3">Ouvrier</th>
+              <th class="p-3">Montant (DA)</th>
+              <th class="p-3">Motif / Note</th>
+              <th class="p-3 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="advances-table-body" class="divide-y divide-slate-800/60"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. TAB MATERIAUX -->
+    <section id="tab-materials" class="space-y-4 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 class="text-lg font-black text-white">Stocks & Approvisionnements Matériaux</h2>
+          <p class="text-xs text-slate-400">Suivi des réceptions (BL), consommations et alertes de stock</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openModal('modal-new-material')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold border border-slate-700">
+            + Matériau
+          </button>
+          <button onclick="openModal('modal-stock-movement')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">
+            ⇅ Entrée / Sortie Stock
+          </button>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+            <tr>
+              <th class="p-3">Matériau</th>
+              <th class="p-3">Catégorie</th>
+              <th class="p-3">Reçu</th>
+              <th class="p-3">Consommé</th>
+              <th class="p-3">Stock Actuel</th>
+              <th class="p-3">Statut</th>
+            </tr>
+          </thead>
+          <tbody id="materials-table-body" class="divide-y divide-slate-800/60"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 5. TAB JOURNAL -->
+    <section id="tab-journal" class="space-y-4 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 class="text-lg font-black text-white">Journal de Bord Quotidien</h2>
+          <p class="text-xs text-slate-400">Rapports d'avancement, météo et événements majeurs</p>
+        </div>
+        <button onclick="openModal('modal-new-log')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">
+          + Rédiger Rapport du Jour
+        </button>
+      </div>
+
+      <div id="logs-feed-container" class="space-y-3"></div>
+    </section>
+
+    <!-- 6. TAB CAISSE -->
+    <section id="tab-caisse" class="space-y-4 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h2 class="text-lg font-black text-white">Petite Caisse de Chantier & Dépenses</h2>
+          <p class="text-xs text-slate-400">Carburant, quincaillerie, déchargement et arrêté de caisse</p>
+        </div>
+        <button onclick="openModal('modal-new-expense')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black">
+          + Dépense de Caisse
+        </button>
+      </div>
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+            <tr>
+              <th class="p-3">Date</th>
+              <th class="p-3">Catégorie</th>
+              <th class="p-3">Description</th>
+              <th class="p-3">Montant (DA)</th>
+              <th class="p-3">Réf / Facture</th>
+            </tr>
+          </thead>
+          <tbody id="expenses-table-body" class="divide-y divide-slate-800/60"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: NOUVEL OUVRRIER -->
+  <div id="modal-new-worker" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-black text-white">Ajouter un Ouvrier</h3>
+        <button onclick="closeModal('modal-new-worker')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="handleCreateWorker(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Nom et Prénom</label>
+          <input type="text" id="w-name" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Corps d'État (Métier)</label>
+          <input type="text" id="w-craft" placeholder="Maçon, Coffreur, Plombier..." required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Taux Journalier (DA)</label>
+          <input type="number" id="w-rate" value="2800" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Numéro Téléphone</label>
+          <input type="text" id="w-phone" placeholder="06..." class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">
+          Enregistrer l'Ouvrier
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOUVEL ACOMPTE -->
+  <div id="modal-new-advance" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-black text-white">Verser un Acompte</h3>
+        <button onclick="closeModal('modal-new-advance')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="handleCreateAdvance(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Ouvrier Bénéficiaire</label>
+          <select id="adv-worker" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none"></select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Montant Acompte (DA)</label>
+          <input type="number" id="adv-amount" required placeholder="Ex: 5000" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Date</label>
+          <input type="date" id="adv-date" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Motif / Note</label>
+          <input type="text" id="adv-note" placeholder="Avance fin de semaine..." class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">
+          Confirmer le Versement
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOUVEAU CHANTIER -->
+  <div id="modal-new-site" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-black text-white">Nouveau Chantier BTP</h3>
+        <button onclick="closeModal('modal-new-site')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="handleCreateSite(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Nom du Chantier</label>
+          <input type="text" id="site-name" required placeholder="Ex: Résidence El Bahia" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Client / Maître d'Ouvrage</label>
+          <input type="text" id="site-client" placeholder="Ex: Promotion Immobilière" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Localisation / Ville</label>
+          <input type="text" id="site-address" placeholder="Ex: Oran / Alger" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">
+          Créer le Chantier
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: MOUVEMENT DE STOCK -->
+  <div id="modal-stock-movement" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
+    <div class="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-black text-white">Mouvement de Stock Matériau</h3>
+        <button onclick="closeModal('modal-stock-movement')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="handleStockMovement(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Matériau</label>
+          <select id="mov-material" required class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none"></select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Type de Mouvement</label>
+          <select id="mov-type" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+            <option value="reception">📥 Entrée / Réception (BL)</option>
+            <option value="consommation">📤 Sortie / Consommation Chantier</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Quantité</label>
+          <input type="number" id="mov-qty" step="0.1" required placeholder="Ex: 50" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Réf Bon / Détails</label>
+          <input type="text" id="mov-ref" placeholder="BL-901..." class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black">
+          Valider le Mouvement
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADMIN LICENSE GENERATOR -->
+  <div id="modal-admin-generator" class="fixed inset-0 z-50 bg-slate-950/80 p-4 backdrop-blur-xs hidden items-center justify-center">
+    <div class="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-black text-amber-400 flex items-center gap-1.5">🔑 Générateur de Licences Admin</h3>
+          <p class="text-[11px] text-slate-400">belaidmounir24@gmail.com · 5 500 DA (1 An)</p>
+        </div>
+        <button onclick="closeModal('modal-admin-generator')" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      <form onsubmit="handleAdminGenerate(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Entreprise ou Client</label>
+          <input type="text" id="adm-client" placeholder="Ex: SARL BTP Oran" class="w-full px-3 py-2 rounded-xl bg-slate-800 border border-slate-700 text-white outline-none">
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-linear-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black">
+          Générer la Clé Officielle
+        </button>
+      </form>
+      <div id="adm-result" class="hidden p-3 rounded-xl bg-slate-950 border border-amber-500/40 text-center space-y-2">
+        <span class="text-[10px] uppercase font-bold text-slate-400">Clé d'Activation Valide 365 Jours</span>
+        <div id="adm-key-display" class="font-mono text-lg font-black text-amber-300 select-all tracking-wider"></div>
+        <button onclick="copyAdminKey()" class="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 text-xs font-black">
+          Copier la Clé
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // DATA LAYER & LOCALSTORAGE
+    const DB_KEY = 'chantierpro_db_v2';
+    let db = {
+      sites: [{ id: 'site_1', name: 'Chantier Principal', client: 'Client BTP', address: 'Zone Industrielle' }],
+      activeSite: 'site_1',
+      workers: [
+        { id: 'w1', name: 'Karim Brahimi', craft: 'Chef Coffreur', rate: 3500, phone: '0661 12 34 56' },
+        { id: 'w2', name: 'Yacine Mansouri', craft: 'Ferrailleur', rate: 3000, phone: '0662 98 76 54' },
+        { id: 'w3', name: 'Ahmed Belkacem', craft: 'Maçon', rate: 2800, phone: '0655 43 21 09' },
+        { id: 'w4', name: 'Samir Hamidi', craft: 'Manœuvre', rate: 2200, phone: '0670 11 22 33' }
+      ],
+      attendance: {},
+      advances: [
+        { id: 'adv_1', workerId: 'w2', amount: 5000, date: new Date().toISOString().slice(0, 10), note: 'Avance transport' }
+      ],
+      materials: [
+        { id: 'm1', name: 'Ciment CPJ-CEM II 42.5', category: 'Gros Œuvre', received: 400, consumed: 280, unit: 'sacs' },
+        { id: 'm2', name: 'Sable Oued Râclé 0/4', category: 'Agrégats', received: 45, consumed: 32, unit: 'm³' },
+        { id: 'm3', name: 'Gravier Concrassé 15/25', category: 'Agrégats', received: 35, consumed: 26, unit: 'tonnes' },
+        { id: 'm4', name: 'Acier FeE500 Ø12', category: 'Ferraillage', received: 12, consumed: 8.5, unit: 'tonnes' }
+      ],
+      expenses: [
+        { id: 'exp_1', date: new Date().toISOString().slice(0, 10), category: 'Carburant', description: 'Gasoil engin grue', amount: 3500, ref: 'Facture #042' }
+      ],
+      logs: []
+    };
+
+    function loadDatabase() {
+      try {
+        const stored = localStorage.getItem(DB_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && Array.isArray(parsed.sites)) {
+            db = parsed;
+          }
+        }
+      } catch (e) {
+        console.error('Error loading DB:', e);
+      }
+    }
+
+    function saveDatabase() {
+      try {
+        localStorage.setItem(DB_KEY, JSON.stringify(db));
+      } catch (e) {
+        console.error('Error saving DB:', e);
+      }
+    }
+
+    // TAB MANAGEMENT
+    function switchTab(tabId) {
+      document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-500', 'text-slate-950');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+
+      const target = document.getElementById('tab-' + tabId);
+      if (target) target.classList.remove('hidden');
+
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-amber-500', 'text-slate-950');
+        activeBtn.classList.remove('bg-slate-800', 'text-slate-300');
+      }
+
+      if (tabId === 'pointage') renderPointage();
+      if (tabId === 'workers') renderWorkers();
+      if (tabId === 'advances') renderAdvances();
+      if (tabId === 'materials') renderMaterials();
+      if (tabId === 'journal') renderLogs();
+      if (tabId === 'caisse') renderExpenses();
+    }
+
+    // MODAL HELPERS
+    function openModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.replace('hidden', 'flex');
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.replace('flex', 'hidden');
+    }
+
+    // RENDER SITES
+    function renderSites() {
+      const sel = document.getElementById('select-active-site');
+      if (!sel) return;
+      sel.innerHTML = db.sites.map(s => `
+        <option value="${s.id}" ${s.id === db.activeSite ? 'selected' : ''}>${s.name}</option>
+      `).join('');
+      sel.onchange = (e) => {
+        db.activeSite = e.target.value;
+        saveDatabase();
+        renderPointage();
+        renderMaterials();
+      };
+    }
+
+    // 1. POINTAGE LOGIC
+    function renderPointage() {
+      const date = document.getElementById('pointage-date').value || new Date().toISOString().slice(0, 10);
+      document.getElementById('pointage-date').value = date;
+      const tbody = document.getElementById('pointage-table-body');
+      if (!tbody) return;
+
+      const dateRecords = db.attendance[date] || {};
+
+      tbody.innerHTML = (db.workers || []).map(w => {
+        const att = dateRecords[w.id] || { status: 'P', otHours: 0 };
+        const rate = w.rate || 0;
+        let dayAmount = rate;
+        if (att.status === 'A') dayAmount = 0;
+        if (att.status === 'D') dayAmount = rate * 0.5;
+        if (att.status === 'R') dayAmount = rate * 0.75;
+        dayAmount += (att.otHours || 0) * (rate / 8) * 1.5;
+
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="p-3 font-bold text-white">${w.name}</td>
+            <td class="p-3 text-slate-400">${w.craft || 'Ouvrier'}</td>
+            <td class="p-3">
+              <div class="flex items-center gap-1">
+                <button onclick="setPresence('${w.id}', 'P')" class="px-2 py-1 rounded ${att.status === 'P' ? 'bg-emerald-600 text-white font-bold' : 'bg-slate-800 text-slate-400'}">P (Présent)</button>
+                <button onclick="setPresence('${w.id}', 'D')" class="px-2 py-1 rounded ${att.status === 'D' ? 'bg-amber-600 text-white font-bold' : 'bg-slate-800 text-slate-400'}">½</button>
+                <button onclick="setPresence('${w.id}', 'A')" class="px-2 py-1 rounded ${att.status === 'A' ? 'bg-rose-600 text-white font-bold' : 'bg-slate-800 text-slate-400'}">A (Absent)</button>
+              </div>
+            </td>
+            <td class="p-3">
+              <input type="number" min="0" max="8" value="${att.otHours || 0}" onchange="setOtHours('${w.id}', this.value)" class="w-14 px-2 py-1 rounded bg-slate-800 border border-slate-700 text-white text-center font-bold">
+            </td>
+            <td class="p-3 font-mono text-slate-300">${rate.toLocaleString('fr-FR')} DA</td>
+            <td class="p-3 text-right font-mono font-bold text-amber-400">${Math.round(dayAmount).toLocaleString('fr-FR')} DA</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function setPresence(workerId, status) {
+      const date = document.getElementById('pointage-date').value;
+      if (!db.attendance[date]) db.attendance[date] = {};
+      const current = db.attendance[date][workerId] || { otHours: 0 };
+      db.attendance[date][workerId] = { ...current, status };
+      saveDatabase();
+      renderPointage();
+    }
+
+    function setOtHours(workerId, hours) {
+      const date = document.getElementById('pointage-date').value;
+      if (!db.attendance[date]) db.attendance[date] = {};
+      const current = db.attendance[date][workerId] || { status: 'P' };
+      db.attendance[date][workerId] = { ...current, otHours: parseFloat(hours) || 0 };
+      saveDatabase();
+      renderPointage();
+    }
+
+    function quickMarkAllPresent() {
+      const date = document.getElementById('pointage-date').value;
+      if (!db.attendance[date]) db.attendance[date] = {};
+      (db.workers || []).forEach(w => {
+        db.attendance[date][w.id] = { status: 'P', otHours: 0 };
+      });
+      saveDatabase();
+      renderPointage();
+    }
+
+    // 2. WORKERS LOGIC
+    function renderWorkers() {
+      const container = document.getElementById('workers-cards-grid');
+      if (!container) return;
+      container.innerHTML = (db.workers || []).map(w => `
+        <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-white text-sm">${w.name}</h4>
+            <span class="text-xs font-mono font-bold text-amber-400">${w.rate.toLocaleString('fr-FR')} DA/j</span>
+          </div>
+          <div class="text-xs text-slate-400">${w.craft}</div>
+          <div class="text-[11px] text-slate-500 font-mono">${w.phone || 'Pas de numéro'}</div>
+          <div class="pt-2 flex justify-end">
+            <button onclick="deleteWorker('${w.id}')" class="text-xs text-rose-400 hover:underline">Supprimer</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleCreateWorker(e) {
+      e.preventDefault();
+      const newW = {
+        id: 'w_' + Date.now(),
+        name: document.getElementById('w-name').value.trim(),
+        craft: document.getElementById('w-craft').value.trim(),
+        rate: parseFloat(document.getElementById('w-rate').value) || 2500,
+        phone: document.getElementById('w-phone').value.trim()
+      };
+      db.workers.push(newW);
+      saveDatabase();
+      closeModal('modal-new-worker');
+      e.target.reset();
+      renderWorkers();
+      renderPointage();
+    }
+
+    function deleteWorker(id) {
+      if (confirm('Supprimer cet ouvrier ?')) {
+        db.workers = db.workers.filter(w => w.id !== id);
+        saveDatabase();
+        renderWorkers();
+        renderPointage();
+      }
+    }
+
+    // 3. ACOMPTES
+    function renderAdvances() {
+      const tbody = document.getElementById('advances-table-body');
+      const selWorker = document.getElementById('adv-worker');
+      if (selWorker) {
+        selWorker.innerHTML = (db.workers || []).map(w => `<option value="${w.id}">${w.name} (${w.craft})</option>`).join('');
+      }
+      if (!tbody) return;
+      tbody.innerHTML = (db.advances || []).map(adv => {
+        const worker = (db.workers || []).find(w => w.id === adv.workerId);
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="p-3 font-mono text-slate-400">${adv.date}</td>
+            <td class="p-3 font-bold text-white">${worker ? worker.name : 'Inconnu'}</td>
+            <td class="p-3 font-mono font-black text-rose-400">-${adv.amount.toLocaleString('fr-FR')} DA</td>
+            <td class="p-3 text-slate-300">${adv.note || '-'}</td>
+            <td class="p-3 text-right">
+              <button onclick="deleteAdvance('${adv.id}')" class="text-rose-400 hover:underline">Supprimer</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function handleCreateAdvance(e) {
+      e.preventDefault();
+      const adv = {
+        id: 'adv_' + Date.now(),
+        workerId: document.getElementById('adv-worker').value,
+        amount: parseFloat(document.getElementById('adv-amount').value) || 0,
+        date: document.getElementById('adv-date').value || new Date().toISOString().slice(0, 10),
+        note: document.getElementById('adv-note').value.trim()
+      };
+      db.advances.unshift(adv);
+      saveDatabase();
+      closeModal('modal-new-advance');
+      e.target.reset();
+      renderAdvances();
+    }
+
+    function deleteAdvance(id) {
+      if (confirm('Annuler cet acompte ?')) {
+        db.advances = db.advances.filter(a => a.id !== id);
+        saveDatabase();
+        renderAdvances();
+      }
+    }
+
+    // 4. MATERIAUX
+    function renderMaterials() {
+      const tbody = document.getElementById('materials-table-body');
+      const selMat = document.getElementById('mov-material');
+      if (selMat) {
+        selMat.innerHTML = (db.materials || []).map(m => `<option value="${m.id}">${m.name} (${m.unit})</option>`).join('');
+      }
+      if (!tbody) return;
+      tbody.innerHTML = (db.materials || []).map(m => {
+        const remaining = (m.received || 0) - (m.consumed || 0);
+        const isAlert = remaining <= 10;
+        return `
+          <tr class="hover:bg-slate-800/40">
+            <td class="p-3 font-bold text-white">${m.name}</td>
+            <td class="p-3 text-slate-400">${m.category}</td>
+            <td class="p-3 font-mono text-emerald-400">+${m.received} ${m.unit}</td>
+            <td class="p-3 font-mono text-rose-400">-${m.consumed} ${m.unit}</td>
+            <td class="p-3 font-mono font-black text-white">${remaining} ${m.unit}</td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isAlert ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30' : 'bg-emerald-500/20 text-emerald-400'}">
+                ${isAlert ? '⚠️ Stock Faible' : '✓ Normal'}
+              </span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function handleStockMovement(e) {
+      e.preventDefault();
+      const matId = document.getElementById('mov-material').value;
+      const type = document.getElementById('mov-type').value;
+      const qty = parseFloat(document.getElementById('mov-qty').value) || 0;
+      const mat = db.materials.find(m => m.id === matId);
+      if (mat) {
+        if (type === 'reception') mat.received = (mat.received || 0) + qty;
+        else mat.consumed = (mat.consumed || 0) + qty;
+        saveDatabase();
+        closeModal('modal-stock-movement');
+        e.target.reset();
+        renderMaterials();
+      }
+    }
+
+    // 5. CAISSE
+    function renderExpenses() {
+      const tbody = document.getElementById('expenses-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = (db.expenses || []).map(exp => `
+        <tr class="hover:bg-slate-800/40">
+          <td class="p-3 font-mono text-slate-400">${exp.date}</td>
+          <td class="p-3 font-bold text-white">${exp.category}</td>
+          <td class="p-3 text-slate-300">${exp.description}</td>
+          <td class="p-3 font-mono font-bold text-amber-400">${exp.amount.toLocaleString('fr-FR')} DA</td>
+          <td class="p-3 font-mono text-[11px] text-slate-500">${exp.ref || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    // 6. JSON EXPORT & IMPORT
+    function exportAllDataJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+      const downloadAnchor = document.createElement('a');
+      const date = new Date().toISOString().slice(0, 10);
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `ChantierPro_Sauvegarde_${date}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && Array.isArray(parsed.sites)) {
+            db = parsed;
+            saveDatabase();
+            renderSites();
+            renderPointage();
+            renderWorkers();
+            renderAdvances();
+            renderMaterials();
+            renderExpenses();
+            alert('Données ChantierPro restaurées avec succès !');
+          } else {
+            alert('Fichier JSON incompatible.');
+          }
+        } catch (err) {
+          alert('Erreur de lecture du fichier JSON : ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // 7. ADMIN KEY GENERATOR
+    const SALT = 'CHANTIERPRO_2026_BTP_SECURE_SALT';
+    const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+    function simpleHash(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash);
+    }
+
+    function computeChecksum(prefix, seed) {
+      const combined = `${prefix}_${seed}_${SALT}`;
+      let temp = simpleHash(combined);
+      let res = '';
+      for (let i = 0; i < 4; i++) {
+        res += CHARS[temp % CHARS.length];
+        temp = Math.floor(temp / CHARS.length) + (i * 7);
+      }
+      return res;
+    }
+
+    function handleAdminGenerate(e) {
+      e.preventDefault();
+      const client = document.getElementById('adm-client').value || 'BTP';
+      let seed = '';
+      const cleanRef = client.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+      if (cleanRef.length >= 2) {
+        seed = (CHARS.includes(cleanRef[0]) ? cleanRef[0] : 'C') +
+               (CHARS.includes(cleanRef[1]) ? cleanRef[1] : 'P') +
+               CHARS[Math.floor(Math.random() * CHARS.length)] +
+               CHARS[Math.floor(Math.random() * CHARS.length)];
+      } else {
+        for (let i = 0; i < 4; i++) seed += CHARS[Math.floor(Math.random() * CHARS.length)];
+      }
+      const checksum = computeChecksum('CP1Y', seed);
+      const fullKey = `CP1Y-${seed}-${checksum}`;
+
+      document.getElementById('adm-key-display').textContent = fullKey;
+      document.getElementById('adm-result').classList.remove('hidden');
+    }
+
+    function copyAdminKey() {
+      const key = document.getElementById('adm-key-display').textContent;
+      navigator.clipboard.writeText(key);
+      alert('Clé copiée : ' + key);
+    }
+
+    // INIT
+    loadDatabase();
+    renderSites();
+    renderPointage();
+  </script>
+</body>
+</html>

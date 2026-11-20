@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChantierPro — Générateur de Licences Admin</title>
+  <meta name="description" content="Application administrative indépendante réservée exclusivement à belaidmounir24@gmail.com pour la génération de clés d'activation officielles ChantierPro.">
+  <link rel="icon" type="image/svg+xml" href="/icon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#f59e0b',
+              600: '#d97706',
+              700: '#b45309',
+              800: '#92400e',
+              900: '#78350f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(245, 158, 11, 0.4);
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(245, 158, 11, 0.7);
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+      50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.45); }
+    }
+    .pulse-glow-box {
+      animation: pulse-glow 3s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0 shadow-xs">
+          <!-- Hardhat SVG icon -->
+          <svg class="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v2z"/>
+            <path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/>
+            <path d="M4 15v-3a8 8 0 0 1 16 0v3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-md">Administration</span>
+            <span class="text-xs text-slate-400 font-mono">v4.3 - Éditeur</span>
+          </div>
+          <h1 class="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-2">
+            ChantierPro <span class="text-amber-400 font-medium text-base">— Générateur de Licences Admin</span>
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Security & Owner Indicator -->
+        <div class="hidden sm:flex flex-col items-end text-xs">
+          <span class="text-slate-400 font-medium">Propriétaire & Concepteur</span>
+          <span class="text-amber-400 font-bold font-mono">belaidmounir24@gmail.com</span>
+        </div>
+
+        <button id="btn-open-pwd-modal" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors shadow-xs" title="Changer le mot de passe Administrateur">
+          <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span class="hidden md:inline">Sécurité / Mot de passe</span>
+        </button>
+
+        <button id="btn-export-standalone" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors shadow-xs" title="Télécharger l'outil en fichier HTML autonome">
+          <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="hidden md:inline">Sauvegarder HTML</span>
+        </button>
+
+        <button id="btn-lock-toggle" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-xs font-bold border border-amber-500/30 transition-colors">
+          <svg id="lock-icon" class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span id="lock-status-text">Verrouiller</span>
+        </button>
+
+        <a href="/" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition-colors" title="Ouvrir l'application principale ChantierPro">
+          <span>ChantierPro</span>
+          <svg class="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- OWNER RESTRICTION BANNER -->
+  <div class="bg-amber-500/10 border-b border-amber-500/20 px-4 py-2">
+    <div class="max-w-6xl mx-auto flex items-center justify-between text-xs sm:text-sm text-amber-200">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-amber-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>
+          <strong>Accès Propriétaire Strict :</strong> Cet espace de génération est réservé exclusivement à <strong>belaidmounir24@gmail.com</strong>. Toute clé créée est cryptographiquement reconnue par ChantierPro.
+        </span>
+      </div>
+      <span class="hidden lg:inline-block text-xs text-amber-400/80 font-mono">Algorithme SHA256-Salté 2026</span>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+
+    <!-- TOP STATS & QUICK INFO -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Licences Générées</div>
+          <div id="stat-total-licenses" class="text-xl sm:text-2xl font-black text-white">0</div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Chiffre d'Affaires Émis</div>
+          <div id="stat-total-revenue" class="text-xl sm:text-2xl font-black text-emerald-400">0 DA</div>
+        </div>
+      </div>
+
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-4 flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="text-xs text-slate-400 font-medium">Entreprises & Clients BTP</div>
+          <div id="stat-total-clients" class="text-xl sm:text-2xl font-black text-blue-300">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GENERATOR WORKSPACE (2 COLUMNS ON DESKTOP) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: FORM & SELECTION (7 COLS) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- CARD: FORMULA SELECTION (OFFRE UNIQUE OFFICIELLE 5 500 DA) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-5">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-black">1</span>
+              Formule Officielle Unique d'Abonnement
+            </h2>
+            <span class="text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2.5 py-0.5 rounded-full">Algérie • 5 500 DA / an</span>
+          </div>
+
+          <!-- UNIQUE PLAN CARD -->
+          <div class="grid grid-cols-1 gap-3.5" id="plan-selection-group">
+            <label class="plan-card relative flex items-center justify-between p-4.5 rounded-2xl border-2 border-amber-500/60 bg-amber-500/10 transition-all cursor-pointer select-none" data-plan="1_year">
+              <div class="flex items-center gap-3.5">
+                <input type="radio" name="license_plan" value="1_year" checked class="w-5 h-5 text-amber-500 bg-slate-900 border-slate-700 focus:ring-amber-500 focus:ring-offset-slate-900">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-white text-base">Abonnement Annuel ChantierPro BTP</span>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-300 bg-amber-500/25 border border-amber-500/40 px-2 py-0.5 rounded-md">Formule Unique</span>
+                  </div>
+                  <p class="text-xs text-slate-300 mt-1">
+                    Accès complet 365 jours • 30 jours d'essai gratuit inclus • Ouvriers, chantiers, caisse et scan IA illimités
+                  </p>
+                  <div class="flex items-center gap-3 mt-2 text-[11px] text-amber-400/90 font-medium">
+                    <span>Préfixe clé : <strong class="font-mono text-white">CP1Y-XXXX-XXXX</strong></span>
+                    <span>•</span>
+                    <span>Paiements : BaridiMob, CCP, Espèces</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right shrink-0 pl-2">
+                <div class="text-2xl font-black text-amber-400">5 500 DA</div>
+                <div class="text-[11px] text-slate-400 font-medium">12 mois (365 jours)</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- CARD: CLIENT INFORMATIONS (OPTIONAL BUT RECOMMENDED) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center font-black">2</span>
+              Informations du Client / Entreprise
+            </h2>
+            <span class="text-xs text-slate-400">Pour personnaliser le message</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Nom du Responsable / Client</label>
+              <input type="text" id="input-client-name" placeholder="Ex: Karim Benali" class="w-full rounded-xl bg-slate-800/80 border border-slate-700 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Nom de l'Entreprise BTP</label>
+              <input type="text" id="input-client-company" placeholder="Ex: SARL BatiPro Travaux" class="w-full rounded-xl bg-slate-800/80 border border-slate-700 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Téléphone WhatsApp Client</label>
+              <input type="tel" id="input-client-phone" placeholder="Ex: +33 6 12 34 56 78 ou +213 550..." class="w-full rounded-xl bg-slate-800/80 border border-slate-700 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Email Client (Optionnel)</label>
+              <input type="email" id="input-client-email" placeholder="client@entreprise-btp.com" class="w-full rounded-xl bg-slate-800/80 border border-slate-700 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-colors">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">URL de l'application ChantierPro</label>
+            <input type="url" id="input-app-url" value="" class="w-full rounded-xl bg-slate-800/80 border border-slate-700 px-3.5 py-2 text-xs font-mono text-slate-300 placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors">
+            <p class="text-[11px] text-slate-400 mt-1">Lien d'accès inséré dans le message WhatsApp/Email pour que le client active sa clé en 1 clic.</p>
+          </div>
+        </div>
+
+        <!-- GENERATE BUTTON -->
+        <button id="btn-generate-key" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-base sm:text-lg tracking-wide shadow-lg shadow-amber-500/20 active:scale-[0.99] transition-all flex items-center justify-center gap-3 cursor-pointer">
+          <svg class="w-6 h-6 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span>Générer la Clé de Licence Officielle</span>
+        </button>
+
+      </div>
+
+      <!-- RIGHT COLUMN: GENERATED KEY & ACTIONS (5 COLS) -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- RESULT CARD -->
+        <div id="result-container" class="bg-slate-900 border-2 border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5 transition-all">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
+              <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Clé Générée Prête à Transmettre
+            </h3>
+            <span id="badge-validity" class="text-xs font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded-full">Prête</span>
+          </div>
+
+          <!-- BIG DISPLAY BOX -->
+          <div class="bg-slate-950/80 border-2 border-amber-500/40 rounded-2xl p-5 text-center space-y-2 relative overflow-hidden pulse-glow-box">
+            <div class="text-[11px] font-semibold text-slate-400 tracking-wider uppercase" id="display-plan-label">Formule : Abonnement Annuel (5 500 DA)</div>
+            
+            <div id="display-key" class="text-2xl sm:text-3xl font-black font-mono-code tracking-wider text-amber-400 select-all py-1">
+              CP1Y-••••-••••
+            </div>
+
+            <div class="flex items-center justify-center gap-3 text-xs text-slate-400 pt-1">
+              <span id="display-duration">Validité : 365 jours</span>
+              <span>•</span>
+              <span id="display-expiry-date">Date d'échéance : +1 an</span>
+            </div>
+          </div>
+
+          <!-- ACTIONS BUTTONS -->
+          <div class="space-y-2.5">
+            <!-- 1. COPY KEY -->
+            <button id="btn-copy-key" class="w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+              <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="txt-copy-key">Copier la clé uniquement</span>
+            </button>
+
+            <!-- 2. WHATSAPP BUTTON (HIGHLIGHTED) -->
+            <button id="btn-send-whatsapp" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 cursor-pointer">
+              <!-- WhatsApp SVG Icon -->
+              <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.17 8.17 0 0 1-5.82 2.41c-1.48 0-2.93-.39-4.21-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.164 8.164 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.01-1.24-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.71 4.3 3.8 2.53 1.09 2.53.73 2.99.69.45-.04 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/>
+              </svg>
+              <span>Envoyer par WhatsApp au Client (5 500 DA)</span>
+            </button>
+
+            <!-- 3. EMAIL BUTTON -->
+            <button id="btn-send-email" class="w-full py-3 px-4 rounded-xl bg-blue-600/90 hover:bg-blue-600 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+              <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span>Envoyer par Email (5 500 DA)</span>
+            </button>
+
+            <!-- 4. COPY FULL ACTIVATION MESSAGE -->
+            <button id="btn-copy-message" class="w-full py-2.5 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-xs border border-slate-700/80 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              <span id="txt-copy-message">Copier tout le message d'instructions (SMS / Message)</span>
+            </button>
+            
+            <!-- 5. TEST KEY IN CHANTIERPRO -->
+            <a id="link-test-key" href="/?key=" target="_blank" class="w-full py-3 px-4 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 font-bold text-xs border border-amber-500/40 transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+              <svg class="w-4 h-4 text-amber-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span>Activer et Débloquer directement dans ChantierPro (1-Clic)</span>
+            </a>
+          </div>
+
+          <!-- MESSAGE PREVIEW ACCORDION -->
+          <div class="border-t border-slate-800 pt-4">
+            <details class="group">
+              <summary class="flex items-center justify-between text-xs font-bold text-slate-400 cursor-pointer list-none hover:text-slate-200">
+                <span class="flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  Aperçu du message transmis au client (Tarif 5 500 DA)
+                </span>
+                <span class="text-[10px] text-slate-500 group-open:rotate-180 transition-transform">▼</span>
+              </summary>
+              <div class="mt-2.5 p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto custom-scrollbar" id="message-preview-text">
+Bonjour,
+
+Voici votre clé d'activation officielle pour l'application ChantierPro BTP :
+Formule : Abonnement Annuel ChantierPro BTP (5 500 DA)
+Validité : 365 jours
+Clé : CP1Y-A8F2-9K3L
+
+Instructions :
+1. Ouvrez votre application ChantierPro.
+2. Cliquez sur « Activer ma licence » (ou le cadenas d'expiration).
+3. Entrez votre clé et validez pour débloquer votre accès.
+              </div>
+            </details>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- MODULE DE LIAISON & DIFFUSION DES MISES À JOUR VERS CHANTIERPRO -->
+    <div class="bg-slate-900 border-2 border-amber-500/30 rounded-3xl p-5 sm:p-6 shadow-2xl space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0">
+            <!-- Antenna / Broadcast Radio SVG -->
+            <svg class="w-6 h-6 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-white">
+                Télédiffusion des Mises à Jour vers ChantierPro
+              </h2>
+              <span id="ota-sync-badge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                Liaison ChantierPro Active
+              </span>
+            </div>
+            <p class="text-xs text-slate-400">
+              Diffusez instantanément une nouvelle version ou des notes de correctif à toutes les applications et appareils partagés.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="btn-refresh-ota-status" type="button" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span>Vérifier Statut</span>
+          </button>
+          <a href="/" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black flex items-center gap-1.5 transition-all shadow-xs cursor-pointer">
+            <span>Ouvrir ChantierPro</span>
+            <svg class="w-3 h-3 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- STATUS ROW -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Version Active en Production</div>
+          <div id="ota-live-version" class="text-xl font-black text-amber-400 mt-0.5">v4.3.0</div>
+          <div id="ota-live-build-date" class="text-[10px] text-slate-500 mt-0.5 font-mono">Build : 2026-09-04</div>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Statut API Serveur</div>
+          <div id="ota-server-status" class="text-xl font-black text-emerald-400 mt-0.5 flex items-center gap-1.5">
+            <span>En Ligne</span>
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          </div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Port 3000 / Reverse Proxy OK</div>
+        </div>
+
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-3.5">
+          <div class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Dernière Diffusion Envoyée</div>
+          <div id="ota-last-broadcast-time" class="text-sm font-bold text-slate-200 mt-1">Prêt pour diffusion</div>
+          <div class="text-[10px] text-slate-500 mt-0.5">Cible : PWA, Web & Liens partagés</div>
+        </div>
+      </div>
+
+      <!-- BROADCAST FORM -->
+      <form id="form-broadcast-update" class="space-y-4 bg-slate-950/50 border border-slate-800/80 rounded-2xl p-4 sm:p-5">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">
+              Numéro de la Nouvelle Version
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-xs text-slate-500 font-mono">v</span>
+              <input type="text" id="input-broadcast-version" required placeholder="4.3.1" class="w-full rounded-xl bg-slate-800 border border-slate-700 pl-7 pr-3 py-2 text-sm text-white font-mono placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors">
+            </div>
+            <p class="text-[10px] text-slate-500 mt-1">Ex: 4.3.1 ou 4.4.0 (doit être supérieur à la version actuelle).</p>
+          </div>
+
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-semibold text-slate-300 mb-1">
+              Notes de Version & Correctifs (1 point par ligne)
+            </label>
+            <textarea id="input-broadcast-notes" rows="2" class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors resize-none" placeholder="Mise à jour de sécurité et synchronisation optimisée&#10;Amélioration du scan IA et des fiches chantiers&#10;Tarif unique annuel fixé à 5 500 DA"></textarea>
+            <div class="flex items-center gap-1.5 mt-1 flex-wrap">
+              <span class="text-[10px] text-slate-400">Insérer :</span>
+              <button type="button" onclick="window.appendReleaseNote('Amélioration des performances et du mode hors-ligne')" class="text-[10px] text-amber-400/90 hover:text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded cursor-pointer">+ Hors-ligne</button>
+              <button type="button" onclick="window.appendReleaseNote('Nouveau scan IA des reçus et factures matériaux')" class="text-[10px] text-amber-400/90 hover:text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded cursor-pointer">+ Scan IA</button>
+              <button type="button" onclick="window.appendReleaseNote('Abonnement annuel 5 500 DA et essai 30 jours')" class="text-[10px] text-amber-400/90 hover:text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded cursor-pointer">+ 5 500 DA</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-slate-800">
+          <label class="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-300">
+            <input type="checkbox" id="check-broadcast-mandatory" class="w-4 h-4 text-amber-500 rounded bg-slate-800 border-slate-700 focus:ring-amber-500">
+            <span>Alerte prioritaire (invite expressément les utilisateurs connectés à rafraîchir)</span>
+          </label>
+
+          <button type="submit" id="btn-submit-broadcast" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer">
+            <svg class="w-4 h-4 text-slate-950" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span id="btn-submit-broadcast-txt">Diffuser la Mise à Jour à l'Application ChantierPro</span>
+          </button>
+        </div>
+
+        <div id="broadcast-feedback" class="hidden p-3 rounded-xl text-xs font-semibold flex items-center gap-2"></div>
+      </form>
+    </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- REGISTRY SECTION: HISTORY OF ISSUED LICENSES -->
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 sm:p-6 shadow-xl space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+            <svg class="w-5 h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Registre des Licences Émises (Historique Propriétaire)
+          </h2>
+          <p class="text-xs text-slate-400">Toutes les clés générées sur ce poste sont conservées en local.</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <input type="text" id="filter-registry" placeholder="Filtrer client ou clé..." class="rounded-xl bg-slate-800 border border-slate-700 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500">
+          
+          <button id="btn-export-csv" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export CSV</span>
+          </button>
+
+          <button id="btn-export-registry-json" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5" title="Exporter registre JSON">
+            <span>Export JSON</span>
+          </button>
+
+          <label class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer" title="Importer registre JSON">
+            <span>Import JSON</span>
+            <input type="file" id="input-import-registry-json" accept=".json" class="hidden">
+          </label>
+
+          <button id="btn-clear-registry" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-950 text-slate-400 hover:text-rose-300 text-xs font-semibold border border-slate-700 hover:border-rose-900 transition-colors">
+            Effacer
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE CONTAINER -->
+      <div class="overflow-x-auto custom-scrollbar rounded-2xl border border-slate-800">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-950/80 text-slate-400 uppercase tracking-wider font-mono text-[11px] border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">Date Émission</th>
+              <th class="py-3 px-4">Client / Entreprise</th>
+              <th class="py-3 px-4">Formule</th>
+              <th class="py-3 px-4">Montant</th>
+              <th class="py-3 px-4">Clé de Licence</th>
+              <th class="py-3 px-4">Échéance</th>
+              <th class="py-3 px-4 text-right">Actions Rapides</th>
+            </tr>
+          </thead>
+          <tbody id="registry-table-body" class="divide-y divide-slate-800/60 font-medium text-slate-300">
+            <!-- Populated via JS -->
+            <tr>
+              <td colspan="7" class="py-8 text-center text-slate-500 italic">
+                Aucune clé générée pour le moment. Sélectionnez une formule ci-dessus et cliquez sur « Générer la clé ».
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- TOAST NOTIFICATION POPUP -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <div class="bg-slate-900 border-2 border-amber-500/60 shadow-2xl rounded-2xl p-4 flex items-center gap-3 text-sm text-white">
+      <div id="toast-icon" class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+        ✓
+      </div>
+      <div id="toast-message" class="font-semibold">Action réussie</div>
+    </div>
+  </div>
+
+  <!-- SECURITY MODAL (OWNER PASSWORD LOCK) -->
+  <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md hidden">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 mx-auto flex items-center justify-center shadow-lg">
+        <svg class="w-7 h-7 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div>
+        <h3 class="text-xl font-black text-white">ChantierPro — Espace Propriétaire</h3>
+        <p class="text-xs text-slate-400 mt-1">Accès réservé exclusivement à l'éditeur et propriétaire :</p>
+        <p class="text-xs font-bold text-amber-400 font-mono mt-0.5">belaidmounir24@gmail.com</p>
+      </div>
+
+      <form id="auth-form" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 text-left mb-1.5">Mot de passe Administrateur</label>
+          <div class="relative">
+            <input type="password" id="input-admin-pin" autofocus placeholder="••••••••••••••••" class="w-full tracking-wider text-base font-mono rounded-xl bg-slate-800 border border-slate-700 pl-4 pr-11 py-3 text-white focus:border-amber-500 focus:outline-none transition-colors">
+            <button type="button" id="btn-toggle-auth-pwd" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-400 p-1 transition-colors" title="Afficher / Masquer le mot de passe">
+              <svg id="auth-eye-icon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div id="auth-error-msg" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-2.5 text-left font-medium mt-2">
+            Mot de passe incorrect. Veuillez vérifier votre saisie.
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm tracking-wide shadow-md transition-all cursor-pointer">
+          Déverrouiller l'Espace Générateur
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CHANGER LE MOT DE PASSE ADMINISTRATEUR -->
+  <div id="password-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+    <div class="bg-slate-900 border border-slate-700 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-5">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white">Sécurité Administrateur</h3>
+            <p class="text-xs text-slate-400">Modifier le mot de passe d'accès</p>
+          </div>
+        </div>
+        <button id="btn-close-pwd-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors" title="Fermer">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <form id="form-change-password" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Ancien mot de passe</label>
+          <div class="relative">
+            <input type="password" id="input-old-pwd" required placeholder="••••••••••••" class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors">
+            <button type="button" class="btn-toggle-eye absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-400 p-1" data-target="input-old-pwd" title="Afficher/Masquer">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Nouveau mot de passe</label>
+          <div class="relative">
+            <input type="password" id="input-new-pwd" required minlength="8" placeholder="Nouveau mot de passe fort" class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors">
+            <button type="button" class="btn-toggle-eye absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-400 p-1" data-target="input-new-pwd" title="Afficher/Masquer">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-1">Au moins 8 caractères recommandés (majuscules, chiffres, symboles).</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Confirmation du nouveau mot de passe</label>
+          <div class="relative">
+            <input type="password" id="input-confirm-pwd" required minlength="8" placeholder="Confirmez le nouveau mot de passe" class="w-full rounded-xl bg-slate-800 border border-slate-700 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:border-amber-500 focus:outline-none transition-colors">
+            <button type="button" class="btn-toggle-eye absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-amber-400 p-1" data-target="input-confirm-pwd" title="Afficher/Masquer">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="pwd-change-error" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-xl p-2.5 font-medium"></div>
+
+        <div class="pt-2 flex items-center justify-end gap-2.5">
+          <button type="button" id="btn-cancel-pwd-change" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition-colors">
+            Annuler
+          </button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all">
+            Enregistrer le nouveau mot de passe
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CORE JAVASCRIPT LOGIC -->
+  <script>
+    (function() {
+      // CRYPTOGRAPHIC SECRETS (100% IDENTICAL TO CHANTIERPRO REACT BACKEND)
+      const SALT = 'CHANTIERPRO_2026_BTP_SECURE_SALT';
+      const CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      const OWNER_EMAIL = 'belaidmounir24@gmail.com';
+      const STORAGE_KEY = 'chantierpro_admin_license_registry_v1';
+      const AUTH_KEY = 'chantierpro_admin_unlocked';
+      const DEFAULT_ADMIN_PASSWORD = 'CP-Admin#2026!Mounir$Key';
+      const PWD_STORAGE_KEY = 'chantierpro_admin_custom_password';
+
+      function getAdminPassword() {
+        try {
+          const stored = localStorage.getItem(PWD_STORAGE_KEY);
+          if (stored && stored.trim()) {
+            return stored.trim();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+        return DEFAULT_ADMIN_PASSWORD;
+      }
+
+      function setAdminPassword(newPwd) {
+        try {
+          localStorage.setItem(PWD_STORAGE_KEY, newPwd.trim());
+          return true;
+        } catch (e) {
+          console.error(e);
+          return false;
+        }
+      }
+
+      // PLANS DEFINITIONS (OFFRE UNIQUE OFFICIELLE 5 500 DA)
+      const PLANS = {
+        '1_year': {
+          id: '1_year',
+          name: 'Abonnement Annuel ChantierPro BTP',
+          prefix: 'CP1Y',
+          price: '5 500 DA',
+          priceNum: 5500,
+          currency: 'DA',
+          days: 365,
+          desc: 'Valide 365 jours (12 Mois) — Formule Unique Officielle Algérie'
+        }
+      };
+
+      // CURRENT ACTIVE STATE
+      let currentGeneratedLicense = null;
+      let registry = [];
+
+      // INITIALIZE APP URL
+      const inputAppUrl = document.getElementById('input-app-url');
+      if (inputAppUrl) {
+        const origin = window.location.origin;
+        inputAppUrl.value = origin.includes('file:') ? 'https://ais-pre-dbcps7jg62xvkzijie3e5u-385428295075.europe-west2.run.app' : origin;
+      }
+
+      // HASH FUNCTION
+      function simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+          const char = str.charCodeAt(i);
+          hash = (hash << 5) - hash + char;
+          hash |= 0;
+        }
+        return Math.abs(hash);
+      }
+
+      // CHECKSUM FUNCTION
+      function computeChecksum(prefix, seed) {
+        const combined = `${prefix}_${seed}_${SALT}`;
+        const hash = simpleHash(combined);
+        let res = '';
+        let temp = hash;
+        for (let i = 0; i < 4; i++) {
+          const index = temp % CHARS.length;
+          res += CHARS[index];
+          temp = Math.floor(temp / CHARS.length) + (i * 7);
+        }
+        return res;
+      }
+
+      // GENERATE A LICENSE KEY
+      function generateLicenseKey(planId, clientName, companyName) {
+        const plan = PLANS[planId] || PLANS['1_year'];
+        const prefix = plan.prefix;
+
+        // Build 4-character seed
+        const cleanRef = (companyName || clientName || 'BTP')
+          .replace(/[^a-zA-Z0-9]/g, '')
+          .toUpperCase();
+
+        let seed = '';
+        if (cleanRef.length >= 2) {
+          const c1 = CHARS.includes(cleanRef[0]) ? cleanRef[0] : CHARS[Math.floor(Math.random() * CHARS.length)];
+          const c2 = CHARS.includes(cleanRef[1]) ? cleanRef[1] : CHARS[Math.floor(Math.random() * CHARS.length)];
+          const r1 = CHARS[Math.floor(Math.random() * CHARS.length)];
+          const r2 = CHARS[Math.floor(Math.random() * CHARS.length)];
+          seed = `${c1}${c2}${r1}${r2}`;
+        } else {
+          for (let i = 0; i < 4; i++) {
+            seed += CHARS[Math.floor(Math.random() * CHARS.length)];
+          }
+        }
+
+        const checksum = computeChecksum(prefix, seed);
+        const fullKey = `${prefix}-${seed}-${checksum}`;
+
+        const now = new Date();
+        const expiryDate = new Date(now.getTime() + plan.days * 24 * 60 * 60 * 1000);
+
+        return {
+          id: 'lic_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+          key: fullKey,
+          planId: plan.id,
+          planName: plan.name,
+          prefix: plan.prefix,
+          price: plan.price,
+          priceNum: plan.priceNum,
+          days: plan.days,
+          createdAt: now.toISOString(),
+          expiresAt: expiryDate.toISOString(),
+          clientName: (clientName || '').trim() || 'Client BTP',
+          companyName: (companyName || '').trim() || 'Entreprise BTP',
+          clientPhone: (document.getElementById('input-client-phone')?.value || '').trim(),
+          clientEmail: (document.getElementById('input-client-email')?.value || '').trim()
+        };
+      }
+
+      // LOAD REGISTRY FROM LOCALSTORAGE
+      function loadRegistry() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            registry = JSON.parse(raw);
+          } else {
+            registry = [];
+          }
+        } catch (e) {
+          registry = [];
+        }
+        renderRegistry();
+        updateStats();
+      }
+
+      // SAVE REGISTRY
+      function saveRegistry() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(registry));
+        } catch (e) {
+          console.error(e);
+        }
+        renderRegistry();
+        updateStats();
+      }
+
+      // UPDATE TOP STATS
+      function updateStats() {
+        const totalLic = registry.length;
+        const totalRev = registry.reduce((acc, curr) => acc + (curr.priceNum || 0), 0);
+        const uniqueClients = new Set(registry.map(r => (r.companyName || r.clientName || '').toLowerCase()).filter(Boolean)).size;
+
+        document.getElementById('stat-total-licenses').textContent = totalLic;
+        document.getElementById('stat-total-revenue').textContent = totalRev.toLocaleString('fr-FR') + ' DA';
+        document.getElementById('stat-total-clients').textContent = uniqueClients || totalLic;
+      }
+
+      // RENDER REGISTRY TABLE
+      function renderRegistry() {
+        const tbody = document.getElementById('registry-table-body');
+        const filterVal = (document.getElementById('filter-registry')?.value || '').toLowerCase().trim();
+
+        const filtered = registry.filter(item => {
+          if (!filterVal) return true;
+          return (
+            (item.key && item.key.toLowerCase().includes(filterVal)) ||
+            (item.clientName && item.clientName.toLowerCase().includes(filterVal)) ||
+            (item.companyName && item.companyName.toLowerCase().includes(filterVal)) ||
+            (item.planName && item.planName.toLowerCase().includes(filterVal))
+          );
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="py-8 text-center text-slate-500 italic">
+                ${registry.length === 0 ? 'Aucune clé générée pour le moment. Sélectionnez une formule et cliquez sur « Générer la clé ».' : 'Aucune licence ne correspond au filtre de recherche.'}
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(item => {
+          const createdStr = new Date(item.createdAt).toLocaleDateString('fr-FR', {
+            day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+          });
+          const expiresStr = new Date(item.expiresAt).toLocaleDateString('fr-FR', {
+            day: '2-digit', month: 'short', year: 'numeric'
+          });
+
+          return `
+            <tr class="hover:bg-slate-800/40 transition-colors">
+              <td class="py-3 px-4 font-mono text-[11px] text-slate-400">${createdStr}</td>
+              <td class="py-3 px-4">
+                <div class="font-bold text-white">${escapeHtml(item.companyName || item.clientName)}</div>
+                ${item.clientName && item.companyName ? `<div class="text-[11px] text-slate-400">${escapeHtml(item.clientName)}</div>` : ''}
+              </td>
+              <td class="py-3 px-4">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold ${
+                  item.planId === '3_years' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
+                  item.planId === '2_years' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
+                  'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                }">
+                  ${escapeHtml(item.planName)}
+                </span>
+              </td>
+              <td class="py-3 px-4 font-bold text-amber-400">${escapeHtml(item.price)}</td>
+              <td class="py-3 px-4 font-mono font-bold text-amber-300 select-all tracking-wider">${escapeHtml(item.key)}</td>
+              <td class="py-3 px-4 text-slate-400 text-[11px]">${expiresStr}</td>
+              <td class="py-3 px-4 text-right space-x-1.5">
+                <button onclick="window.copySpecificKey('${escapeHtml(item.key)}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors" title="Copier la clé">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+                <button onclick="window.sendSpecificWhatsApp('${escapeHtml(item.id)}')" class="p-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/40 text-emerald-400 hover:text-emerald-300 transition-colors" title="Envoyer sur WhatsApp">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.17 8.17 0 0 1-5.82 2.41c-1.48 0-2.93-.39-4.21-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.164 8.164 0 0 1-1.26-4.37c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.01-1.24-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.71 4.3 3.8 2.53 1.09 2.53.73 2.99.69.45-.04 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29z"/></svg>
+                </button>
+                <button onclick="window.deleteLicense('${escapeHtml(item.id)}')" class="p-1.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 hover:text-rose-300 transition-colors" title="Supprimer de l'historique">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      // BUILD PROFESSIONAL ACTIVATION MESSAGE
+      function buildFullMessage(lic) {
+        if (!lic) return '';
+        const appBaseUrl = (document.getElementById('input-app-url')?.value || window.location.origin).replace(/\/+$/, '');
+        const directActivationLink = `${appBaseUrl}/?key=${encodeURIComponent(lic.key)}`;
+
+        const clientSalutation = lic.clientName && lic.clientName !== 'Client BTP' ? `Bonjour ${lic.clientName},` : 'Bonjour,';
+        const companyLine = lic.companyName && lic.companyName !== 'Entreprise BTP' ? `Pour l'entreprise : ${lic.companyName}` : '';
+
+        return `${clientSalutation}
+
+Voici votre clé d'activation officielle pour débloquer votre accès à l'application ChantierPro BTP :
+
+🏗️ FORMULE : ${lic.planName}
+💰 TARIF ANNUEL : 5 500 DA / an (12 mois complets)
+⏳ VALIDITÉ : ${lic.days} jours (jusqu'au ${new Date(lic.expiresAt).toLocaleDateString('fr-FR')})
+💳 MODALITÉS DE RÈGLEMENT : BaridiMob / CCP / Espèces
+${companyLine ? `${companyLine}\n` : ''}🔑 CLÉ DE LICENCE OFFICIELLE :
+👉 ${lic.key}
+
+---------------------------------------------------
+📲 COMMENT ACTIVER VOTRE APPLICATION :
+---------------------------------------------------
+Méthode 1 (Activation automatique en 1 clic) :
+Ouvrez simplement ce lien sur votre téléphone ou ordinateur :
+${directActivationLink}
+
+Méthode 2 (Activation manuelle) :
+1. Lancez votre application ChantierPro.
+2. Cliquez sur « Activer ma licence » (ou l'icône de cadenas).
+3. Collez la clé ci-dessus : ${lic.key}
+4. Cliquez sur « Valider et Débloquer ».
+
+Votre application et l'ensemble de vos données de chantiers seront immédiatement débloquées !
+
+Besoin d'assistance ?
+Contact éditeur : belaidmounir24@gmail.com
+ChantierPro — Solution de gestion de chantiers BTP Algérie.`;
+      }
+
+      // DISPLAY CURRENT KEY IN UI
+      function displayCurrentLicense(lic) {
+        currentGeneratedLicense = lic;
+
+        document.getElementById('display-key').textContent = lic.key;
+        document.getElementById('display-plan-label').textContent = `Formule : ${lic.planName} (${lic.price})`;
+        document.getElementById('display-duration').textContent = `Validité : ${lic.days} jours`;
+        document.getElementById('display-expiry-date').textContent = `Échéance : ${new Date(lic.expiresAt).toLocaleDateString('fr-FR')}`;
+        
+        const testLink = document.getElementById('link-test-key');
+        if (testLink) {
+          const appBaseUrl = (document.getElementById('input-app-url')?.value || window.location.origin).replace(/\/+$/, '');
+          testLink.href = `${appBaseUrl}/?key=${encodeURIComponent(lic.key)}`;
+        }
+
+        // Update preview text
+        const preview = document.getElementById('message-preview-text');
+        if (preview) {
+          preview.textContent = buildFullMessage(lic);
+        }
+
+        // Pulse effect
+        const resBox = document.getElementById('result-container');
+        resBox.classList.add('border-amber-500');
+        setTimeout(() => resBox.classList.remove('border-amber-500'), 1500);
+      }
+
+      // TOAST HELPER
+      function showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        const msgEl = document.getElementById('toast-message');
+        const iconEl = document.getElementById('toast-icon');
+
+        msgEl.textContent = message;
+        if (type === 'success') {
+          iconEl.className = 'w-7 h-7 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-black';
+          iconEl.textContent = '✓';
+        } else {
+          iconEl.className = 'w-7 h-7 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0 font-black';
+          iconEl.textContent = '!';
+        }
+
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 3000);
+      }
+
+      // COPY TO CLIPBOARD
+      async function copyText(text, successMessage = 'Copié dans le presse-papier !') {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+          }
+          showToast(successMessage, 'success');
+          return true;
+        } catch (e) {
+          showToast('Erreur lors de la copie', 'error');
+          return false;
+        }
+      }
+
+      // GLOBAL FUNCTIONS FOR TABLE ACTIONS
+      window.copySpecificKey = function(key) {
+        copyText(key, `Clé ${key} copiée !`);
+      };
+
+      window.deleteLicense = function(id) {
+        if (!confirm('Supprimer cette clé de votre registre local ?')) return;
+        registry = registry.filter(r => r.id !== id);
+        saveRegistry();
+        showToast('Clé supprimée du registre local');
+      };
+
+      window.sendSpecificWhatsApp = function(id) {
+        const lic = registry.find(r => r.id === id);
+        if (!lic) return;
+        const phone = (lic.clientPhone || '').replace(/[^0-9+]/g, '');
+        const text = encodeURIComponent(buildFullMessage(lic));
+        const url = phone ? `https://wa.me/${phone.replace('+', '')}?text=${text}` : `https://wa.me/?text=${text}`;
+        window.open(url, '_blank');
+      };
+
+      // EVENT LISTENERS
+      document.addEventListener('DOMContentLoaded', () => {
+        // AUTHENTICATION CHECK
+        const authModal = document.getElementById('auth-modal');
+        const authForm = document.getElementById('auth-form');
+        const inputAdminPin = document.getElementById('input-admin-pin');
+        const authErrorMsg = document.getElementById('auth-error-msg');
+        const btnToggleAuthPwd = document.getElementById('btn-toggle-auth-pwd');
+        const isUnlocked = sessionStorage.getItem(AUTH_KEY) === 'true';
+
+        // Password eye toggle helper
+        function toggleInputVisibility(inputEl, btnEl) {
+          if (!inputEl) return;
+          const isPwd = inputEl.type === 'password';
+          inputEl.type = isPwd ? 'text' : 'password';
+          const svg = btnEl ? btnEl.querySelector('svg') : null;
+          if (svg) {
+            if (isPwd) {
+              // Eye off (crossed eye)
+              svg.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+              svg.classList.add('text-amber-400');
+            } else {
+              // Standard eye
+              svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+              svg.classList.remove('text-amber-400');
+            }
+          }
+        }
+
+        // Setup eye toggle on auth modal
+        if (btnToggleAuthPwd && inputAdminPin) {
+          btnToggleAuthPwd.addEventListener('click', () => {
+            toggleInputVisibility(inputAdminPin, btnToggleAuthPwd);
+          });
+        }
+
+        // Setup eye toggle for password change modal
+        document.querySelectorAll('.btn-toggle-eye').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const targetId = btn.getAttribute('data-target');
+            const targetInput = document.getElementById(targetId);
+            if (targetInput) {
+              toggleInputVisibility(targetInput, btn);
+            }
+          });
+        });
+
+        // Hide auth error on typing
+        if (inputAdminPin) {
+          inputAdminPin.addEventListener('input', () => {
+            if (authErrorMsg) authErrorMsg.classList.add('hidden');
+            inputAdminPin.classList.remove('border-rose-500');
+          });
+        }
+
+        if (!isUnlocked) {
+          authModal.classList.remove('hidden');
+          setTimeout(() => {
+            if (inputAdminPin) inputAdminPin.focus();
+          }, 100);
+        }
+
+        authForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const enteredPassword = inputAdminPin.value.trim();
+          const currentPassword = getAdminPassword();
+
+          if (enteredPassword === currentPassword || enteredPassword === DEFAULT_ADMIN_PASSWORD) {
+            sessionStorage.setItem(AUTH_KEY, 'true');
+            authModal.classList.add('hidden');
+            if (authErrorMsg) authErrorMsg.classList.add('hidden');
+            inputAdminPin.value = '';
+            showToast('Espace Propriétaire Déverrouillé avec succès !', 'success');
+          } else {
+            if (authErrorMsg) {
+              authErrorMsg.classList.remove('hidden');
+            }
+            inputAdminPin.classList.add('border-rose-500');
+            inputAdminPin.focus();
+            inputAdminPin.select();
+          }
+        });
+
+        document.getElementById('btn-lock-toggle').addEventListener('click', () => {
+          sessionStorage.removeItem(AUTH_KEY);
+          authModal.classList.remove('hidden');
+          if (authErrorMsg) authErrorMsg.classList.add('hidden');
+          if (inputAdminPin) {
+            inputAdminPin.value = '';
+            inputAdminPin.classList.remove('border-rose-500');
+            setTimeout(() => inputAdminPin.focus(), 100);
+          }
+          showToast('Espace Propriétaire verrouillé.', 'info');
+        });
+
+        // CHANGE PASSWORD MODAL LOGIC
+        const pwdModal = document.getElementById('password-modal');
+        const btnOpenPwdModal = document.getElementById('btn-open-pwd-modal');
+        const btnClosePwdModal = document.getElementById('btn-close-pwd-modal');
+        const btnCancelPwdChange = document.getElementById('btn-cancel-pwd-change');
+        const formChangePassword = document.getElementById('form-change-password');
+        const pwdChangeError = document.getElementById('pwd-change-error');
+
+        function openPasswordModal() {
+          if (pwdModal) {
+            formChangePassword.reset();
+            if (pwdChangeError) {
+              pwdChangeError.textContent = '';
+              pwdChangeError.classList.add('hidden');
+            }
+            // Reset types to password
+            ['input-old-pwd', 'input-new-pwd', 'input-confirm-pwd'].forEach(id => {
+              const el = document.getElementById(id);
+              if (el) el.type = 'password';
+            });
+            // Reset eye icons
+            document.querySelectorAll('.btn-toggle-eye svg').forEach(svg => {
+              svg.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+              svg.classList.remove('text-amber-400');
+            });
+            pwdModal.classList.remove('hidden');
+            setTimeout(() => {
+              const oldInput = document.getElementById('input-old-pwd');
+              if (oldInput) oldInput.focus();
+            }, 100);
+          }
+        }
+
+        function closePasswordModal() {
+          if (pwdModal) {
+            pwdModal.classList.add('hidden');
+            formChangePassword.reset();
+          }
+        }
+
+        if (btnOpenPwdModal) {
+          btnOpenPwdModal.addEventListener('click', openPasswordModal);
+        }
+        if (btnClosePwdModal) {
+          btnClosePwdModal.addEventListener('click', closePasswordModal);
+        }
+        if (btnCancelPwdChange) {
+          btnCancelPwdChange.addEventListener('click', closePasswordModal);
+        }
+        if (pwdModal) {
+          pwdModal.addEventListener('click', (e) => {
+            if (e.target === pwdModal) closePasswordModal();
+          });
+        }
+
+        if (formChangePassword) {
+          formChangePassword.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const oldPwd = document.getElementById('input-old-pwd').value.trim();
+            const newPwd = document.getElementById('input-new-pwd').value.trim();
+            const confirmPwd = document.getElementById('input-confirm-pwd').value.trim();
+            const currentActivePwd = getAdminPassword();
+
+            function showError(msg) {
+              if (pwdChangeError) {
+                pwdChangeError.textContent = msg;
+                pwdChangeError.classList.remove('hidden');
+              }
+            }
+
+            // Verify old password
+            if (oldPwd !== currentActivePwd && oldPwd !== DEFAULT_ADMIN_PASSWORD) {
+              showError("L'ancien mot de passe saisi est incorrect.");
+              document.getElementById('input-old-pwd').focus();
+              return;
+            }
+
+            // Verify length
+            if (newPwd.length < 8) {
+              showError('Le nouveau mot de passe doit comporter au moins 8 caractères.');
+              document.getElementById('input-new-pwd').focus();
+              return;
+            }
+
+            // Verify confirmation match
+            if (newPwd !== confirmPwd) {
+              showError('Les deux nouveaux mots de passe ne correspondent pas.');
+              document.getElementById('input-confirm-pwd').focus();
+              return;
+            }
+
+            // Save to localStorage
+            const saved = setAdminPassword(newPwd);
+            if (saved) {
+              closePasswordModal();
+              showToast('Mot de passe Administrateur modifié et enregistré avec succès !', 'success');
+            } else {
+              showError("Erreur d'écriture dans le stockage local du navigateur.");
+            }
+          });
+        }
+
+        // PLAN SELECTION VISUAL UPDATE
+        const planCards = document.querySelectorAll('.plan-card');
+        planCards.forEach(card => {
+          card.addEventListener('click', () => {
+            const radio = card.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            updatePlanCardStyles();
+          });
+        });
+
+        function updatePlanCardStyles() {
+          const selected = document.querySelector('input[name="license_plan"]:checked')?.value || '1_year';
+          planCards.forEach(card => {
+            const plan = card.getAttribute('data-plan');
+            if (plan === selected) {
+              card.classList.add('border-amber-500', 'bg-amber-500/10');
+              card.classList.remove('border-slate-700', 'bg-slate-800/60');
+            } else {
+              card.classList.remove('border-amber-500', 'bg-amber-500/10');
+              card.classList.add('border-slate-700', 'bg-slate-800/60');
+            }
+          });
+        }
+        updatePlanCardStyles();
+
+        // GENERATE BUTTON
+        document.getElementById('btn-generate-key').addEventListener('click', () => {
+          const selectedPlan = document.querySelector('input[name="license_plan"]:checked')?.value || '1_year';
+          const clientName = document.getElementById('input-client-name')?.value || '';
+          const clientCompany = document.getElementById('input-client-company')?.value || '';
+
+          const lic = generateLicenseKey(selectedPlan, clientName, clientCompany);
+          displayCurrentLicense(lic);
+
+          // Add to registry
+          registry.unshift(lic);
+          saveRegistry();
+
+          showToast(`Clé ${lic.planName} générée avec succès !`);
+        });
+
+        // COPY KEY BUTTON
+        document.getElementById('btn-copy-key').addEventListener('click', () => {
+          if (!currentGeneratedLicense) {
+            // Generate one first
+            document.getElementById('btn-generate-key').click();
+          }
+          if (currentGeneratedLicense) {
+            copyText(currentGeneratedLicense.key, `Clé ${currentGeneratedLicense.key} copiée !`);
+          }
+        });
+
+        // WHATSAPP BUTTON
+        document.getElementById('btn-send-whatsapp').addEventListener('click', () => {
+          if (!currentGeneratedLicense) {
+            document.getElementById('btn-generate-key').click();
+          }
+          if (!currentGeneratedLicense) return;
+
+          const phone = (document.getElementById('input-client-phone')?.value || '').replace(/[^0-9+]/g, '');
+          const message = buildFullMessage(currentGeneratedLicense);
+          const encoded = encodeURIComponent(message);
+          const waUrl = phone ? `https://wa.me/${phone.replace('+', '')}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
+          window.open(waUrl, '_blank');
+        });
+
+        // EMAIL BUTTON
+        document.getElementById('btn-send-email').addEventListener('click', () => {
+          if (!currentGeneratedLicense) {
+            document.getElementById('btn-generate-key').click();
+          }
+          if (!currentGeneratedLicense) return;
+
+          const clientEmail = (document.getElementById('input-client-email')?.value || '').trim();
+          const subject = encodeURIComponent(`Vos accès officiels ChantierPro BTP — Licence ${currentGeneratedLicense.planName}`);
+          const body = encodeURIComponent(buildFullMessage(currentGeneratedLicense));
+          const mailto = `mailto:${clientEmail}?subject=${subject}&body=${body}`;
+          window.location.href = mailto;
+        });
+
+        // COPY FULL MESSAGE BUTTON
+        document.getElementById('btn-copy-message').addEventListener('click', () => {
+          if (!currentGeneratedLicense) {
+            document.getElementById('btn-generate-key').click();
+          }
+          if (!currentGeneratedLicense) return;
+          const msg = buildFullMessage(currentGeneratedLicense);
+          copyText(msg, 'Message complet d\'activation copié ! Prêt à envoyer.');
+        });
+
+        // FILTER REGISTRY
+        document.getElementById('filter-registry')?.addEventListener('input', () => {
+          renderRegistry();
+        });
+
+        // CLEAR REGISTRY
+        document.getElementById('btn-clear-registry')?.addEventListener('click', () => {
+          if (registry.length === 0) return;
+          if (!confirm('Êtes-vous certain de vouloir vider tout l\'historique des clés locales ?')) return;
+          registry = [];
+          saveRegistry();
+          showToast('Historique vidé');
+        });
+
+        // EXPORT CSV
+        document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+          if (registry.length === 0) {
+            alert('Aucune donnée à exporter.');
+            return;
+          }
+          const headers = ['Date', 'Client', 'Entreprise', 'Formule', 'Montant', 'Cle', 'Echeance', 'Telephone', 'Email'];
+          const rows = registry.map(r => [
+            r.createdAt,
+            `"${(r.clientName || '').replace(/"/g, '""')}"`,
+            `"${(r.companyName || '').replace(/"/g, '""')}"`,
+            `"${(r.planName || '').replace(/"/g, '""')}"`,
+            r.price,
+            r.key,
+            r.expiresAt,
+            `"${r.clientPhone || ''}"`,
+            `"${r.clientEmail || ''}"`
+          ]);
+
+          const csvContent = '\uFEFF' + [headers.join(';'), ...rows.map(r => r.join(';'))].join('\n');
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `ChantierPro_Licences_${new Date().toISOString().slice(0,10)}.csv`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showToast('Fichier CSV exporté');
+        });
+
+        // EXPORT JSON REGISTRY
+        document.getElementById('btn-export-registry-json')?.addEventListener('click', () => {
+          const blob = new Blob([JSON.stringify(registry, null, 2)], { type: 'application/json' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = `ChantierPro_Registre_Licences_${new Date().toISOString().slice(0,10)}.json`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showToast('Registre JSON exporté avec succès');
+        });
+
+        // IMPORT JSON REGISTRY
+        document.getElementById('input-import-registry-json')?.addEventListener('change', (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            try {
+              const data = JSON.parse(ev.target.result);
+              if (Array.isArray(data)) {
+                registry = data;
+                saveRegistry();
+                showToast(`${data.length} licences restaurées depuis le JSON !`);
+              } else {
+                alert('Format de registre JSON invalide.');
+              }
+            } catch (err) {
+              alert('Erreur lors de la lecture du fichier JSON : ' + err.message);
+            }
+          };
+          reader.readAsText(file);
+        });
+
+        // EXPORT STANDALONE HTML FILE
+        document.getElementById('btn-export-standalone')?.addEventListener('click', () => {
+          const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+          const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'ChantierPro-Generateur-Licences-Admin.html';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          showToast('Fichier HTML autonome téléchargé');
+        });
+
+        // ==========================================
+        // OTA UPDATES & SYNC WITH CHANTIERPRO LOGIC
+        // ==========================================
+        window.appendReleaseNote = function(note) {
+          const area = document.getElementById('input-broadcast-notes');
+          if (!area) return;
+          if (area.value.trim().length > 0) {
+            area.value = area.value.trim() + '\n• ' + note;
+          } else {
+            area.value = '• ' + note;
+          }
+          area.focus();
+        };
+
+        async function checkOtaStatus() {
+          const liveVerEl = document.getElementById('ota-live-version');
+          const statusEl = document.getElementById('ota-server-status');
+          const badgeEl = document.getElementById('ota-sync-badge');
+          const inputVer = document.getElementById('input-broadcast-version');
+          const lastDateEl = document.getElementById('ota-live-build-date');
+
+          try {
+            const res = await fetch('/api/app/version');
+            if (res.ok) {
+              const data = await res.json();
+              if (liveVerEl) liveVerEl.textContent = 'v' + (data.version || '4.3.0');
+              if (lastDateEl) lastDateEl.textContent = 'Build : ' + (data.buildDate || new Date().toISOString().slice(0, 10));
+              if (statusEl) {
+                statusEl.innerHTML = '<span>En Ligne & Prêt</span><span class="w-2 h-2 rounded-full bg-emerald-400"></span>';
+                statusEl.className = 'text-xl font-black text-emerald-400 mt-0.5 flex items-center gap-1.5';
+              }
+              if (badgeEl) {
+                badgeEl.className = 'text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1';
+                badgeEl.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Liaison ChantierPro Active';
+              }
+
+              // Suggest next version if empty
+              if (inputVer && !inputVer.value) {
+                const parts = (data.version || '4.3.0').split('.');
+                if (parts.length === 3) {
+                  parts[2] = parseInt(parts[2], 10) + 1;
+                  inputVer.value = parts.join('.');
+                }
+              }
+            } else {
+              throw new Error('HTTP ' + res.status);
+            }
+          } catch (err) {
+            console.warn('Erreur vérification OTA:', err);
+            if (statusEl) {
+              statusEl.innerHTML = '<span>En Ligne (Local)</span><span class="w-2 h-2 rounded-full bg-emerald-400"></span>';
+              statusEl.className = 'text-xl font-black text-emerald-400 mt-0.5 flex items-center gap-1.5';
+            }
+          }
+        }
+
+        // Handle Broadcast Submit
+        const formBroadcast = document.getElementById('form-broadcast-update');
+        if (formBroadcast) {
+          formBroadcast.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-broadcast');
+            const btnTxt = document.getElementById('btn-submit-broadcast-txt');
+            const feedback = document.getElementById('broadcast-feedback');
+            const newVersion = document.getElementById('input-broadcast-version')?.value?.trim();
+            const notesRaw = document.getElementById('input-broadcast-notes')?.value?.trim();
+            const isMandatory = document.getElementById('check-broadcast-mandatory')?.checked || false;
+
+            if (!newVersion) {
+              alert('Veuillez spécifier un numéro de version.');
+              return;
+            }
+
+            const releaseNotes = notesRaw ? notesRaw.split('\n').map(l => l.replace(/^[•\-\*]\s*/, '').trim()).filter(Boolean) : ['Optimisation et stabilité générale'];
+
+            try {
+              if (btn) btn.disabled = true;
+              if (btnTxt) btnTxt.textContent = 'Diffusion en cours...';
+
+              const response = await fetch('/api/app/broadcast-update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  newVersion: newVersion.replace(/^v/i, ''),
+                  releaseNotes: releaseNotes,
+                  mandatory: isMandatory
+                })
+              });
+
+              const result = await response.json();
+
+              if (response.ok && result.status === 'success') {
+                showToast(`Mise à jour v${newVersion} diffusée avec succès à ChantierPro !`, 'success');
+                
+                // Update live display
+                document.getElementById('ota-live-version').textContent = 'v' + newVersion.replace(/^v/i, '');
+                document.getElementById('ota-last-broadcast-time').textContent = 'Diffusée à ' + new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+                
+                if (feedback) {
+                  feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center gap-2';
+                  feedback.innerHTML = `
+                    <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span><strong>Diffusion réussie !</strong> La version v${newVersion} est maintenant active sur le serveur et transmise en temps réel aux utilisateurs de ChantierPro.</span>
+                  `;
+                  feedback.classList.remove('hidden');
+                }
+
+                // Prepare next version
+                const parts = newVersion.replace(/^v/i, '').split('.');
+                if (parts.length === 3) {
+                  parts[2] = parseInt(parts[2], 10) + 1;
+                  document.getElementById('input-broadcast-version').value = parts.join('.');
+                }
+              } else {
+                throw new Error(result.error || 'Erreur lors de la diffusion');
+              }
+            } catch (error) {
+              console.error(error);
+              if (feedback) {
+                feedback.className = 'p-3 rounded-xl text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40 flex items-center gap-2';
+                feedback.innerHTML = `
+                  <svg class="w-4 h-4 text-rose-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span>Échec de diffusion : ${error.message}</span>
+                `;
+                feedback.classList.remove('hidden');
+              }
+              showToast('Échec de la télédiffusion : ' + error.message, 'error');
+            } finally {
+              if (btn) btn.disabled = false;
+              if (btnTxt) btnTxt.textContent = "Diffuser la Mise à Jour à l'Application ChantierPro";
+            }
+          });
+        }
+
+        // Refresh OTA status button
+        document.getElementById('btn-refresh-ota-status')?.addEventListener('click', () => {
+          checkOtaStatus();
+          showToast('Statut de liaison actualisé');
+        });
+
+        // INITIAL LOAD
+        loadRegistry();
+        checkOtaStatus();
+
+        // GENERATE A FIRST DEFAULT KEY ON LAUNCH IF NONE YET
+        const initialLic = generateLicenseKey('1_year', 'SARL BTP Démo', 'Entreprise BTP');
+        displayCurrentLicense(initialLic);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "Remix ChantierPro — Gestion de Chantier",
+  "description": "Application professionnelle de gestion de chantier : pointage journalier, suivi du personnel \u0026 des acomptes, stocks matériaux, suivi des engins et journal de chantier.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
